@@ -1,0 +1,36 @@
+{
+  "apiErrors": [
+    {
+      "code": "id",
+      "message": "Id is required !!"
+    },
+    {
+      "code": "e6",
+      "message": "Invalid email pattern !!"
+    },
+    {
+      "code": "e1",
+      "message": "Information not saved !!"
+    },
+    {
+      "code": "e2",
+      "message": "Information does not exists !!"
+    },
+    {
+      "code": "e3",
+      "message": "Information not found !!"
+    },
+    {
+      "code": "e4",
+      "message": "Information not updated !!"
+    },
+    {
+      "code": "e5",
+      "message": "Failed to delete !!"
+    },
+    {
+      "code": "e7",
+      "message": "System error !!"
+    }
+  ]
+}
