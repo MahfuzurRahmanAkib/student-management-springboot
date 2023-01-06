@@ -51,3 +51,13 @@ u
 Esrc/main/java/com/sms/sb/all_module/controller/TeacherController.java,4\c\4cb8b04c9488472608300693d5be30dc170b8361
 u
 Esrc/main/java/com/sms/sb/common/exception/StudentManagementError.java,4\b\4b5ec2c8bb5907e744fa0507f3c5bfde0f8c9286
+y
+Isrc/main/java/com/sms/sb/common/exception/StudentManagementException.java,4\b\4b74e864af23b8dfd058d057f6c1683267a2088c
+s
+Csrc/main/java/com/sms/sb/common/exception/RestExceptionHandler.java,6\4\64756eca70e09f48012064ddefc2126e70385fad
+n
+>src/main/java/com/sms/sb/common/exception/ErrorCodeReader.java,1\2\12ec2fa5f5797f1af68185e4e5c12d9be339e850
+g
+7src/main/java/com/sms/sb/common/exception/ApiError.java,f\1\f1ad28a19125bacce1498bcb574c64fb1b02ff3a
+g
+7src/main/java/com/sms/sb/common/util/CaseConverter.java,4\0\40b40ec7942d07f866811ba10310c58f886136b1
