@@ -13,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class StudentSearchDto {
     private Long id;
-    @NotBlank
     private String firstName;
     private String lastName;
     private String email;

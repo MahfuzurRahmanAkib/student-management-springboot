@@ -2,7 +2,7 @@ package com.sms.sb.all_module.service.impl;
 
 import com.sms.sb.all_module.converter.TeacherConverter;
 import com.sms.sb.all_module.entity.Teacher;
-import com.sms.sb.all_module.payload.request.TeacherResponseDto;
+import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.TeacherSearchDto;
 import com.sms.sb.all_module.repository.TeacherRepository;
@@ -31,14 +31,14 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherViewModel save(TeacherResponseDto teacherResponseDto) {
+    public TeacherViewModel save(TeacherRequestDto teacherRequestDto) {
         Teacher teacher = new Teacher();
-        TeacherConverter.convertToEntity(teacher, teacherResponseDto);
+        TeacherConverter.convertToEntity(teacher, teacherRequestDto);
         Teacher savedTeacher;
         try {
             savedTeacher = teacherRepository.save(teacher);
         } catch (Exception exception) {
-            LOGGER.error("Student's data not saved : {}", teacherResponseDto);
+            LOGGER.error("Information data not saved : {}", teacherRequestDto);
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_SAVED, HttpStatus.NOT_FOUND, MDC.get(ApplicationConstant.TRACE_ID));
         }
@@ -46,17 +46,17 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher update(TeacherResponseDto teacherResponseDto) {
-        if (Objects.isNull(teacherResponseDto.getId())) {
-            LOGGER.error("Teacher ID is null: {}", teacherResponseDto);
+    public Teacher update(TeacherRequestDto teacherRequestDto) {
+        if (Objects.isNull(teacherRequestDto.getId())) {
+            LOGGER.error("Information ID is null: {}", teacherRequestDto);
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_FOUND, HttpStatus.BAD_REQUEST, MDC.get(ApplicationConstant.TRACE_ID));
         }
-        Teacher teacher = findById(teacherResponseDto.getId());
+        Teacher teacher = findById(teacherRequestDto.getId());
         try {
-            return teacherRepository.save(TeacherConverter.convertToEntity(teacher, teacherResponseDto));
+            return teacherRepository.save(TeacherConverter.convertToEntity(teacher, teacherRequestDto));
         } catch (Exception exception) {
-            LOGGER.error("Teacher information not updated : {}", teacherResponseDto);
+            LOGGER.error("Information information not updated : {}", teacherRequestDto);
             if (exception instanceof StudentManagementException) {
                 throw exception;
             }
@@ -68,7 +68,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher findById(Long id) {
         if (Objects.isNull(id)) {
-            LOGGER.error("Id is required !!");
+            LOGGER.error("Information id is required !!");
             throw new StudentManagementException(
                     ErrorId.ID_IS_REQUIRED, HttpStatus.BAD_REQUEST, MDC.get(ApplicationConstant.TRACE_ID));
         }
@@ -86,7 +86,7 @@ public class TeacherServiceImpl implements TeacherService {
         try {
             teacherRepository.save(teacher);
         } catch (Exception e) {
-            LOGGER.error("Teacher not deleted with id: {}", id);
+            LOGGER.error("Information not deleted with id: {}", id);
             throw new StudentManagementException(
                     ErrorId.FAIL_TO_DELETE, HttpStatus.INTERNAL_SERVER_ERROR, MDC.get(ApplicationConstant.TRACE_ID));
         }

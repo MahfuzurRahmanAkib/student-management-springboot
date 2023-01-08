@@ -2,7 +2,7 @@ package com.sms.sb.all_module.controller;
 
 import com.sms.sb.all_module.converter.TeacherConverter;
 import com.sms.sb.all_module.entity.Teacher;
-import com.sms.sb.all_module.payload.request.TeacherResponseDto;
+import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.TeacherSearchDto;
 import com.sms.sb.all_module.service.TeacherService;
@@ -25,19 +25,19 @@ public class TeacherController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> save(@Valid @RequestBody TeacherResponseDto teacherResponseDto) {
-        teacherService.save(teacherResponseDto);
+    public ResponseEntity<String> save(@Valid @RequestBody TeacherRequestDto teacherRequestDto) {
+        teacherService.save(teacherRequestDto);
         return new ResponseEntity<>(ApplicationConstant.SAVED_SUCCESSFULLY, HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> update(@Valid @RequestBody TeacherResponseDto teacherResponseDto) {
-        teacherService.update(teacherResponseDto);
+    public ResponseEntity<String> update(@Valid @RequestBody TeacherRequestDto teacherRequestDto) {
+        teacherService.update(teacherRequestDto);
         return new ResponseEntity<>(ApplicationConstant.UPDATED_SUCCESSFULLY, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         teacherService.deleteById(id);
         return new ResponseEntity<>(ApplicationConstant.DELETED_SUCCESSFULLY, HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class TeacherController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<TeacherViewModel>> searchFareBasisPageData(@Valid @RequestBody TeacherSearchDto searchDto) {
+    public ResponseEntity<List<TeacherViewModel>> search(@Valid @RequestBody TeacherSearchDto searchDto) {
         List<TeacherViewModel> teacherViewModelList = teacherService.searchTeacher(searchDto);
         return new ResponseEntity<>(teacherViewModelList, HttpStatus.OK);
     }

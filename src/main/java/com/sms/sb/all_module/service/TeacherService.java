@@ -1,16 +1,16 @@
 package com.sms.sb.all_module.service;
 
 import com.sms.sb.all_module.entity.Teacher;
-import com.sms.sb.all_module.payload.request.TeacherResponseDto;
+import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.TeacherSearchDto;
 
 import java.util.List;
 
 public interface TeacherService {
-    TeacherViewModel save(TeacherResponseDto teacherResponseDto);
+    TeacherViewModel save(TeacherRequestDto teacherRequestDto);
 
-    Teacher update(TeacherResponseDto teacherResponseDto);
+    Teacher update(TeacherRequestDto teacherRequestDto);
 
     void deleteById(Long id);
 

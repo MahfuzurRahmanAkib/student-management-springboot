@@ -1,7 +1,7 @@
 package com.sms.sb.all_module.converter;
 
 import com.sms.sb.all_module.entity.Teacher;
-import com.sms.sb.all_module.payload.request.TeacherResponseDto;
+import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.common.util.CaseConverter;
 
@@ -17,12 +17,12 @@ public class TeacherConverter {
         return viewModel;
     }
 
-    public static Teacher convertToEntity(Teacher teacher, TeacherResponseDto teacherResponseDto) {
-        teacher.setFirstName(CaseConverter.capitalizeFirstCharacter(teacherResponseDto.getFirstName()));
-        teacher.setLastName(CaseConverter.capitalizeFirstCharacter(teacherResponseDto.getLastName()));
-        teacher.setSubject(CaseConverter.capitalizeFirstCharacter(teacherResponseDto.getSubject()));
-        teacher.setEmail(CaseConverter.uncapitalizeAllCharacter(teacherResponseDto.getEmail()));
-        teacher.setPhone(teacherResponseDto.getPhone());
+    public static Teacher convertToEntity(Teacher teacher, TeacherRequestDto teacherRequestDto) {
+        teacher.setFirstName(CaseConverter.capitalizeFirstCharacter(teacherRequestDto.getFirstName()));
+        teacher.setLastName(CaseConverter.capitalizeFirstCharacter(teacherRequestDto.getLastName()));
+        teacher.setSubject(CaseConverter.capitalizeFirstCharacter(teacherRequestDto.getSubject()));
+        teacher.setEmail(CaseConverter.uncapitalizeAllCharacter(teacherRequestDto.getEmail()));
+        teacher.setPhone(teacherRequestDto.getPhone());
         return teacher;
     }
 }

@@ -56,7 +56,7 @@ public class StudentController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<StudentViewModel>> searchFareBasisPageData(@Valid @RequestBody StudentSearchDto searchDto) {
+    public ResponseEntity<List<StudentViewModel>> search(@Valid @RequestBody StudentSearchDto searchDto) {
         List<StudentViewModel> studentViewModelList = studentService.searchStudent(searchDto);
         return new ResponseEntity<>(studentViewModelList, HttpStatus.OK);
     }

@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
 
     public Student update(StudentRequestDto studentRequestDto) {
         if (Objects.isNull(studentRequestDto.getId())) {
-            LOGGER.error("Student ID is null: {}", studentRequestDto);
+            LOGGER.error("ID is null: {}", studentRequestDto);
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_FOUND, HttpStatus.BAD_REQUEST, MDC.get(ApplicationConstant.TRACE_ID));
         }
@@ -55,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             return studentRepository.save(StudentConverter.convertToEntity(savedStudent, studentRequestDto));
         } catch (Exception e) {
-            LOGGER.error("Student information not updated : {}", studentRequestDto);
+            LOGGER.error("Information not updated : {}", studentRequestDto);
             if (e instanceof StudentManagementException) {
                 throw e;
             }
@@ -71,7 +71,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             studentRepository.save(student);
         } catch (Exception e) {
-            LOGGER.error("Student not deleted with id: {}", id);
+            LOGGER.error("Information not deleted with id: {}", id);
             throw new StudentManagementException(
                     ErrorId.FAIL_TO_DELETE, HttpStatus.INTERNAL_SERVER_ERROR, MDC.get(ApplicationConstant.TRACE_ID));
         }
@@ -85,7 +85,7 @@ public class StudentServiceImpl implements StudentService {
                     ErrorId.ID_IS_REQUIRED, HttpStatus.BAD_REQUEST, MDC.get(ApplicationConstant.TRACE_ID));
         }
         return studentRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> {
-            LOGGER.error("Student does not exists with id: {}", id);
+            LOGGER.error("Information does not exists with id: {}", id);
             throw new StudentManagementException(
                     ErrorId.INFORMATION_DOES_NOT_EXISTS, HttpStatus.NOT_FOUND, MDC.get(ApplicationConstant.TRACE_ID));
         });
