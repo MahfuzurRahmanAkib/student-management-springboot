@@ -1,15 +1,16 @@
 package com.sms.sb.all_module.service.impl;
 
-import com.sms.sb.all_module.converter.TeacherConverter;
 import com.sms.sb.all_module.entity.Teacher;
 import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.TeacherSearchDto;
 import com.sms.sb.all_module.repository.TeacherRepository;
+import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.TeacherService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
+import com.sms.sb.common.util.CaseConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -23,17 +24,19 @@ import java.util.stream.Collectors;
 @Service
 public class TeacherServiceImpl implements TeacherService {
     private TeacherRepository teacherRepository;
+    private DepartmentService departmentService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, DepartmentService departmentService) {
         super();
         this.teacherRepository = teacherRepository;
+        this.departmentService = departmentService;
     }
 
     @Override
     public TeacherViewModel save(TeacherRequestDto teacherRequestDto) {
         Teacher teacher = new Teacher();
-        TeacherConverter.convertToEntity(teacher, teacherRequestDto);
+        convertToEntity(teacher, teacherRequestDto);
         Teacher savedTeacher;
         try {
             savedTeacher = teacherRepository.save(teacher);
@@ -42,7 +45,7 @@ public class TeacherServiceImpl implements TeacherService {
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_SAVED, HttpStatus.NOT_FOUND, MDC.get(ApplicationConstant.TRACE_ID));
         }
-        return TeacherConverter.convertToViewModel(savedTeacher);
+        return convertToViewModel(savedTeacher);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
         Teacher teacher = findById(teacherRequestDto.getId());
         try {
-            return teacherRepository.save(TeacherConverter.convertToEntity(teacher, teacherRequestDto));
+            return teacherRepository.save(convertToEntity(teacher, teacherRequestDto));
         } catch (Exception exception) {
             LOGGER.error("Information information not updated : {}", teacherRequestDto);
             if (exception instanceof StudentManagementException) {
@@ -95,11 +98,34 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<TeacherViewModel> findAll() {
         List<Teacher> teacherList = teacherRepository.findAllByDeletedFalse();
-        return teacherList.stream().map(TeacherConverter::convertToViewModel).collect(Collectors.toList());
+        return teacherList.stream().map(this::convertToViewModel).collect(Collectors.toList());
     }
 
     @Override
     public List<TeacherViewModel> searchTeacher(TeacherSearchDto teacherSearchDto) {
         return teacherRepository.searchWithName(teacherSearchDto.getFirstName());
+    }
+
+    public TeacherViewModel convertToViewModel(Teacher teacher) {
+        TeacherViewModel viewModel = new TeacherViewModel();
+        viewModel.setId(teacher.getId());
+        viewModel.setFirstName(teacher.getFirstName());
+        viewModel.setLastName(teacher.getLastName());
+        viewModel.setEmail(teacher.getEmail());
+        viewModel.setPhone(teacher.getPhone());
+        viewModel.setDepartmentId(teacher.getDepartmentId());
+        viewModel.setDepartmentCode(teacher.getDepartment().getCode());
+        return viewModel;
+    }
+
+    private Teacher convertToEntity(Teacher teacher, TeacherRequestDto teacherRequestDto) {
+        teacher.setFirstName(CaseConverter.capitalizeFirstCharacter(teacherRequestDto.getFirstName()));
+        teacher.setLastName(CaseConverter.capitalizeFirstCharacter(teacherRequestDto.getLastName()));
+        teacher.setEmail(CaseConverter.uncapitalizeAllCharacter(teacherRequestDto.getEmail()));
+        teacher.setPhone(teacherRequestDto.getPhone());
+        if (Objects.nonNull(teacherRequestDto.getDepartmentId())){
+            teacher.setDepartment(departmentService.findById(teacherRequestDto.getDepartmentId()));
+        }
+        return teacher;
     }
 }

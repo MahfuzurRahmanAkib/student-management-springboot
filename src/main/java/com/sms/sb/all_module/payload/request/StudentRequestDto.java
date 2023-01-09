@@ -31,4 +31,5 @@ public class StudentRequestDto {
     @NotNull
     @Size(max = 16)
     private String phone;
+    private Long departmentId;
 }

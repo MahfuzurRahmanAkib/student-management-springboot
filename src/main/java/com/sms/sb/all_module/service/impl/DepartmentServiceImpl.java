@@ -1,6 +1,5 @@
 package com.sms.sb.all_module.service.impl;
 
-import com.sms.sb.all_module.converter.DepartmentConverter;
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
@@ -10,6 +9,7 @@ import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
+import com.sms.sb.common.util.CaseConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -33,7 +33,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentViewModel save(DepartmentRequestDto departmentRequestDto) {
         Department department = new Department();
-        DepartmentConverter.convertToEntity(department, departmentRequestDto);
+        convertToEntity(department, departmentRequestDto);
         Department savedDepartment;
         try {
             savedDepartment = departmentRepository.save(department);
@@ -42,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_SAVED, HttpStatus.NOT_FOUND, MDC.get(ApplicationConstant.TRACE_ID));
         }
-        return DepartmentConverter.convertToViewModel(savedDepartment);
+        return convertToViewModel(savedDepartment);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         Department savedDepartment = findById(departmentRequestDto.getId());
         try {
-            return departmentRepository.save(DepartmentConverter.convertToEntity(savedDepartment, departmentRequestDto));
+            return departmentRepository.save(convertToEntity(savedDepartment, departmentRequestDto));
         } catch (Exception e) {
             LOGGER.error("Information not updated : {}", departmentRequestDto);
             if (e instanceof StudentManagementException) {
@@ -95,12 +95,26 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<DepartmentViewModel> findAll() {
         List<Department> departmentList = departmentRepository.findAllByDeletedFalse();
-        return departmentList.stream().map(DepartmentConverter::convertToViewModel).collect(Collectors.toList());
+        return departmentList.stream().map(this::convertToViewModel).collect(Collectors.toList());
 
     }
 
     @Override
     public List<DepartmentViewModel> searchDepartment(DepartmentSearchDto searchDto) {
         return departmentRepository.searchWithName(searchDto.getName());
+    }
+
+    private Department convertToEntity(Department department, DepartmentRequestDto departmentRequestDto) {
+        department.setName(CaseConverter.capitalizeFirstCharacter(departmentRequestDto.getName()));
+        department.setCode(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getCode()));
+        return department;
+    }
+
+    public DepartmentViewModel convertToViewModel(Department savedDepartment) {
+        DepartmentViewModel viewModel = new DepartmentViewModel();
+        viewModel.setId(savedDepartment.getId());
+        viewModel.setCode(savedDepartment.getCode());
+        viewModel.setName(savedDepartment.getName());
+        return viewModel;
     }
 }

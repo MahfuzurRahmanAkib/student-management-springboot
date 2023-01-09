@@ -23,4 +23,5 @@ public class SubjectRequestDto {
     @NotBlank
     @Size(max = 100)
     private String code;
+    private Long departmentId;
 }

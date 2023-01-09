@@ -13,4 +13,7 @@ public class SubjectViewModel {
     private Long id;
     private String title;
     private String code;
+    private Long departmentId;
+    private String departmentCode;
+    private String departmentName;
 }

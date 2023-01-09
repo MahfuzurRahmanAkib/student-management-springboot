@@ -1,11 +1,11 @@
 package com.sms.sb.all_module.controller;
 
-import com.sms.sb.all_module.converter.SubjectConverter;
 import com.sms.sb.all_module.entity.Subject;
 import com.sms.sb.all_module.payload.request.SubjectRequestDto;
 import com.sms.sb.all_module.payload.response.SubjectViewModel;
 import com.sms.sb.all_module.payload.search.SubjectSearchDto;
 import com.sms.sb.all_module.service.SubjectService;
+import com.sms.sb.all_module.service.impl.SubjectServiceImpl;
 import com.sms.sb.common.constant.ApplicationConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,12 @@ import java.util.List;
 @RequestMapping("api/subject")
 public class SubjectController {
     private SubjectService subjectService;
+    private SubjectServiceImpl subjectServiceImpl;
 
-    public SubjectController(SubjectService subjectService) {
+    public SubjectController(SubjectService subjectService, SubjectServiceImpl subjectServiceImpl) {
         super();
         this.subjectService = subjectService;
+        this.subjectServiceImpl = subjectServiceImpl;
     }
 
     @PostMapping("/save")
@@ -51,7 +53,7 @@ public class SubjectController {
     @GetMapping("/{id}")
     public ResponseEntity<SubjectViewModel> getById(@PathVariable Long id) {
         Subject subject = subjectService.findById(id);
-        SubjectViewModel subjectViewModel = SubjectConverter.convertToViewModel(subject);
+        SubjectViewModel subjectViewModel = subjectServiceImpl.convertToViewModel(subject);
         return new ResponseEntity<>(subjectViewModel, HttpStatus.OK);
     }
 

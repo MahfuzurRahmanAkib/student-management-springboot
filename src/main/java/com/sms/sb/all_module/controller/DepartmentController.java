@@ -1,11 +1,11 @@
 package com.sms.sb.all_module.controller;
 
-import com.sms.sb.all_module.converter.DepartmentConverter;
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
 import com.sms.sb.all_module.payload.search.DepartmentSearchDto;
 import com.sms.sb.all_module.service.DepartmentService;
+import com.sms.sb.all_module.service.impl.DepartmentServiceImpl;
 import com.sms.sb.common.constant.ApplicationConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,12 @@ import java.util.List;
 @RequestMapping("api/department")
 public class DepartmentController {
     private DepartmentService departmentService;
+    private DepartmentServiceImpl departmentServiceImpl;
 
-    public DepartmentController(DepartmentService departmentService) {
+    public DepartmentController(DepartmentService departmentService, DepartmentServiceImpl departmentServiceImpl) {
         super();
         this.departmentService = departmentService;
+        this.departmentServiceImpl = departmentServiceImpl;
     }
 
     @PostMapping("/save")
@@ -51,7 +53,7 @@ public class DepartmentController {
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentViewModel> getById(@PathVariable Long id) {
         Department department = departmentService.findById(id);
-        DepartmentViewModel departmentViewModel = DepartmentConverter.convertToViewModel(department);
+        DepartmentViewModel departmentViewModel = departmentServiceImpl.convertToViewModel(department);
         return new ResponseEntity<>(departmentViewModel, HttpStatus.OK);
     }
 

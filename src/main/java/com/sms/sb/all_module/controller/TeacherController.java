@@ -1,11 +1,11 @@
 package com.sms.sb.all_module.controller;
 
-import com.sms.sb.all_module.converter.TeacherConverter;
 import com.sms.sb.all_module.entity.Teacher;
 import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.TeacherSearchDto;
 import com.sms.sb.all_module.service.TeacherService;
+import com.sms.sb.all_module.service.impl.TeacherServiceImpl;
 import com.sms.sb.common.constant.ApplicationConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,12 @@ import java.util.List;
 @RequestMapping("api/teacher")
 public class TeacherController {
     private TeacherService teacherService;
+    private TeacherServiceImpl teacherServiceImpl;
 
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService, TeacherServiceImpl teacherServiceImpl) {
         super();
         this.teacherService = teacherService;
+        this.teacherServiceImpl = teacherServiceImpl;
     }
 
     @PostMapping("/save")
@@ -51,7 +53,7 @@ public class TeacherController {
     @GetMapping("/{id}")
     public ResponseEntity<TeacherViewModel> getById(@PathVariable Long id) {
         Teacher teacher = teacherService.findById(id);
-        TeacherViewModel teacherViewModel = TeacherConverter.convertToViewModel(teacher);
+        TeacherViewModel teacherViewModel = teacherServiceImpl.convertToViewModel(teacher);
         return new ResponseEntity<>(teacherViewModel, HttpStatus.OK);
     }
 

@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -28,6 +26,9 @@ public class Teacher extends BaseEntity {
     @Column(name = "phone", length = 16)
     private String phone;
 
-    @Column(name = "subject", length = 100)
-    private String subject;
+    @Column(name = "department_id", insertable = false, updatable = false)
+    private Long departmentId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 }

@@ -33,5 +33,5 @@ public class TeacherRequestDto {
     @NotNull
     @Size(max = 16)
     private String phone;
-    private String subject;
+    private Long departmentId;
 }

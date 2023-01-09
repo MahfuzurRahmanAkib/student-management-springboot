@@ -15,8 +15,8 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "departments")
-public class Department extends BaseEntity{
-    @Column(name = "code", length = 100)
+public class Department extends BaseEntity {
+    @Column(name = "code", length = 100, unique = true)
     private String code;
     @Column(name = "name", length = 100)
     private String name;

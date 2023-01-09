@@ -1,15 +1,16 @@
 package com.sms.sb.all_module.service.impl;
 
-import com.sms.sb.all_module.converter.StudentConverter;
 import com.sms.sb.all_module.entity.Student;
 import com.sms.sb.all_module.payload.request.StudentRequestDto;
 import com.sms.sb.all_module.payload.response.StudentViewModel;
 import com.sms.sb.all_module.payload.search.StudentSearchDto;
 import com.sms.sb.all_module.repository.StudentRepository;
+import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.StudentService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
+import com.sms.sb.common.util.CaseConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -23,17 +24,19 @@ import java.util.stream.Collectors;
 @Service
 public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
+    private DepartmentService departmentService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, DepartmentService departmentService) {
         super();
         this.studentRepository = studentRepository;
+        this.departmentService = departmentService;
     }
 
     @Override
     public StudentViewModel save(StudentRequestDto studentRequestDto) {
         Student student = new Student();
-        StudentConverter.convertToEntity(student, studentRequestDto);
+        convertToEntity(student, studentRequestDto);
         Student savedStudent;
         try {
             savedStudent = studentRepository.save(student);
@@ -42,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_SAVED, HttpStatus.NOT_FOUND, MDC.get(ApplicationConstant.TRACE_ID));
         }
-        return StudentConverter.convertToViewModel(savedStudent);
+        return convertToViewModel(savedStudent);
     }
 
     public Student update(StudentRequestDto studentRequestDto) {
@@ -53,7 +56,7 @@ public class StudentServiceImpl implements StudentService {
         }
         Student savedStudent = findById(studentRequestDto.getId());
         try {
-            return studentRepository.save(StudentConverter.convertToEntity(savedStudent, studentRequestDto));
+            return studentRepository.save(convertToEntity(savedStudent, studentRequestDto));
         } catch (Exception e) {
             LOGGER.error("Information not updated : {}", studentRequestDto);
             if (e instanceof StudentManagementException) {
@@ -94,10 +97,33 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentViewModel> findAll() {
         List<Student> studentList = studentRepository.findAllByDeletedFalse();
-        return studentList.stream().map(StudentConverter::convertToViewModel).collect(Collectors.toList());
+        return studentList.stream().map(this::convertToViewModel).collect(Collectors.toList());
     }
 
     public List<StudentViewModel> searchStudent(StudentSearchDto studentSearchDto) {
         return studentRepository.searchWithName(studentSearchDto.getFirstName());
+    }
+
+    public StudentViewModel convertToViewModel(Student savedStudent) {
+        StudentViewModel viewModel = new StudentViewModel();
+        viewModel.setId(savedStudent.getId());
+        viewModel.setFirstName(savedStudent.getFirstName());
+        viewModel.setLastName(savedStudent.getLastName());
+        viewModel.setEmail(savedStudent.getEmail());
+        viewModel.setPhone(savedStudent.getPhone());
+        viewModel.setDepartmentId(savedStudent.getDepartmentId());
+        viewModel.setDepartmentCode(savedStudent.getDepartment().getCode());
+        return viewModel;
+    }
+
+    private Student convertToEntity(Student student, StudentRequestDto studentRequestDto) {
+        student.setFirstName(CaseConverter.capitalizeFirstCharacter(studentRequestDto.getFirstName()));
+        student.setLastName(CaseConverter.capitalizeFirstCharacter(studentRequestDto.getLastName()));
+        student.setEmail(CaseConverter.uncapitalizeAllCharacter(studentRequestDto.getEmail()));
+        student.setPhone(studentRequestDto.getPhone());
+        if (Objects.nonNull(studentRequestDto.getDepartmentId())){
+            student.setDepartment(departmentService.findById(studentRequestDto.getDepartmentId()));
+        }
+        return student;
     }
 }

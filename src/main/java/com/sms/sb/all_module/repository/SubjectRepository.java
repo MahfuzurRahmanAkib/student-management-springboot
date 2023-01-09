@@ -17,7 +17,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     List<Subject> findAllByDeletedFalse();
 
     @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel(" +
-            "s.id,s.title,s.code ) " +
+            "s.id,s.title,s.code,s.departmentId,s.department.code,s.department.name ) " +
             "FROM Subject s WHERE s.title LIKE %:title% AND s.deleted = false"
     )
     List<SubjectViewModel> searchWithTitle(@Param("title") String title);

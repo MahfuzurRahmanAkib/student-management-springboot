@@ -15,4 +15,6 @@ public class StudentViewModel {
     private String lastName;
     private String email;
     private String phone;
+    private Long departmentId;
+    private String departmentCode;
 }
