@@ -6,6 +6,7 @@ import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.TeacherSearchDto;
 import com.sms.sb.all_module.repository.TeacherRepository;
 import com.sms.sb.all_module.service.DepartmentService;
+import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.all_module.service.TeacherService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
@@ -25,12 +26,14 @@ import java.util.stream.Collectors;
 public class TeacherServiceImpl implements TeacherService {
     private TeacherRepository teacherRepository;
     private DepartmentService departmentService;
+    private SubjectService subjectService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, DepartmentService departmentService) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, DepartmentService departmentService, SubjectService subjectService) {
         super();
         this.teacherRepository = teacherRepository;
         this.departmentService = departmentService;
+        this.subjectService = subjectService;
     }
 
     @Override
@@ -113,8 +116,7 @@ public class TeacherServiceImpl implements TeacherService {
         viewModel.setLastName(teacher.getLastName());
         viewModel.setEmail(teacher.getEmail());
         viewModel.setPhone(teacher.getPhone());
-        viewModel.setDepartmentId(teacher.getDepartmentId());
-        viewModel.setDepartmentCode(teacher.getDepartment().getCode());
+        viewModel.setSubjectViewModelList(subjectService.getTeachersInformation(teacher.getId()));
         return viewModel;
     }
 

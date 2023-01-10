@@ -107,6 +107,10 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository.searchWithTitle(searchDto.getTitle());
     }
 
+    public List<SubjectViewModel> getTeachersInformation(Long id) {
+        return subjectRepository.getTeachersInformation(id);
+    }
+
     public SubjectViewModel convertToViewModel(Subject savedSubject) {
         SubjectViewModel viewModel = new SubjectViewModel();
         viewModel.setId(savedSubject.getId());

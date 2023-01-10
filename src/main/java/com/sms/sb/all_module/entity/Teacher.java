@@ -31,4 +31,6 @@ public class Teacher extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+
+
 }

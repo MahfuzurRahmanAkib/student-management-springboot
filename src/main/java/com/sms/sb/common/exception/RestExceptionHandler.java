@@ -34,7 +34,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError();
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         violations.forEach(violation -> {
-            StudentManagementError studentManagementError = getReservationError(violation.getMessageTemplate());
+            StudentManagementError studentManagementError = getStudentManagementError(violation.getMessageTemplate());
             apiError.addError(studentManagementError);
         });
         return new ResponseEntity(apiError, HttpStatus.BAD_REQUEST);
@@ -43,7 +43,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(StudentManagementException.class)
     public final ResponseEntity<Object> handleUserNotFoundException(StudentManagementException exception, WebRequest request) {
         ApiError apiError = new ApiError();
-        StudentManagementError studentManagementError = getReservationError(exception.getErrorId());
+        StudentManagementError studentManagementError = getStudentManagementError(exception.getErrorId());
         apiError.addError(studentManagementError);
         return new ResponseEntity(apiError, exception.getStatus());
     }
@@ -53,7 +53,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         StudentManagementException reservationServerException = (StudentManagementException) exception.getMostSpecificCause();
         ApiError apiError = new ApiError();
-        StudentManagementError error = getReservationError(reservationServerException.getErrorId());
+        StudentManagementError error = getStudentManagementError(reservationServerException.getErrorId());
         apiError.addError(error);
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
@@ -63,13 +63,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ApiError apiError = new ApiError();
         for (ObjectError error : exception.getBindingResult().getAllErrors()) {
-            StudentManagementError studentManagementError = getReservationError(error.getDefaultMessage());
+            StudentManagementError studentManagementError = getStudentManagementError(error.getDefaultMessage());
             apiError.addError(studentManagementError);
         }
         return new ResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    public StudentManagementError getReservationError(String code) {
+    public StudentManagementError getStudentManagementError(String code) {
         StudentManagementError studentManagementError = ErrorCodeReader.getReservationError(code);
         if (studentManagementError == null) {
             return new StudentManagementError(ErrorId.SYSTEM_ERROR, ApplicationConstant.SYSTEM_ERROR_MSG);

@@ -16,4 +16,10 @@ public class SubjectViewModel {
     private Long departmentId;
     private String departmentCode;
     private String departmentName;
+
+    public SubjectViewModel(Long id, String title, String code) {
+        this.id = id;
+        this.title = title;
+        this.code = code;
+    }
 }

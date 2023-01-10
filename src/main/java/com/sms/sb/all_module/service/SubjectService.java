@@ -19,4 +19,6 @@ public interface SubjectService {
     List<SubjectViewModel> findAll();
 
     List<SubjectViewModel> searchSubject(SubjectSearchDto searchDto);
+
+    List<SubjectViewModel> getTeachersInformation(Long id);
 }
