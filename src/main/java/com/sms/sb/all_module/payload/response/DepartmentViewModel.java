@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,4 +16,11 @@ public class DepartmentViewModel {
     private Long id;
     private String code;
     private String name;
+    private List<SubjectViewModel> subjectViewModelList = new ArrayList<>();
+
+    public DepartmentViewModel(Long id, String code, String name) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+    }
 }

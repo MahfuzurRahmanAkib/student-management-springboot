@@ -15,13 +15,12 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class SubjectRequestDto {
     private Long id;
-    @NotNull
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 1, max = 100)
     private String title;
-    @NotNull
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 1, max = 100)
     private String code;
+    @NotNull
     private Long departmentId;
 }

@@ -7,7 +7,6 @@ import com.sms.sb.all_module.payload.search.SubjectSearchDto;
 import com.sms.sb.all_module.repository.SubjectRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.SubjectService;
-import com.sms.sb.all_module.service.TeacherService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -107,15 +106,11 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository.searchWithTitle(searchDto.getTitle());
     }
 
-    public List<SubjectViewModel> getTeachersInformation(Long id) {
-        return subjectRepository.getTeachersInformation(id);
-    }
-
     public SubjectViewModel convertToViewModel(Subject savedSubject) {
         SubjectViewModel viewModel = new SubjectViewModel();
         viewModel.setId(savedSubject.getId());
-        viewModel.setTitle(savedSubject.getTitle());
-        viewModel.setCode(savedSubject.getCode());
+        viewModel.setSubjectTitle(savedSubject.getTitle());
+        viewModel.setSubjectCode(savedSubject.getCode());
         viewModel.setDepartmentId(savedSubject.getDepartmentId());
         viewModel.setDepartmentCode(savedSubject.getDepartment().getCode());
         viewModel.setDepartmentName(savedSubject.getDepartment().getName());
@@ -131,4 +126,15 @@ public class SubjectServiceImpl implements SubjectService {
         return subject;
     }
 
+    public List<SubjectViewModel> getSubjectInformationByTeacherId(Long id) {
+        return subjectRepository.getSubjectInformationByTeacherId(id);
+    }
+
+    public List<SubjectViewModel> getSubjectInformationByStudentId(Long id) {
+        return subjectRepository.getSubjectInformationByStudentId(id);
+    }
+
+    public List<SubjectViewModel> getSubjectInformationByDepartmentId(Long id) {
+        return subjectRepository.getSubjectInformationByDepartmentId(id);
+    }
 }

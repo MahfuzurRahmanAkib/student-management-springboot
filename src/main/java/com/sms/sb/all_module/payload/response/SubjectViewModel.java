@@ -11,15 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SubjectViewModel {
     private Long id;
-    private String title;
-    private String code;
+    private String subjectTitle;
+    private String subjectCode;
     private Long departmentId;
     private String departmentCode;
     private String departmentName;
 
-    public SubjectViewModel(Long id, String title, String code) {
+    public SubjectViewModel(Long id, String subjectTitle, String subjectCode) {
         this.id = id;
-        this.title = title;
-        this.code = code;
+        this.subjectTitle = subjectTitle;
+        this.subjectCode = subjectCode;
     }
 }

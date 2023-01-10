@@ -29,5 +29,22 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
             "inner join Department as d on d.id = t.departmentId " +
             "inner join Subject as s on d.id = s.departmentId where t.id = :id "
     )
-    List<SubjectViewModel> getTeachersInformation(@Param("id") Long teachersId);
+    List<SubjectViewModel> getSubjectInformationByTeacherId(@Param("id") Long teachersId);
+
+    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel( " +
+            "s.id, s.code, s.title, s.departmentId ,s.department.code,s.department.name" +
+            ") " +
+            "from Student as st " +
+            "inner join Department as d on d.id = st.departmentId " +
+            "inner join Subject as s on d.id = s.departmentId where st.id = :id "
+    )
+    List<SubjectViewModel> getSubjectInformationByStudentId(@Param("id") Long studentId);
+
+    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel( " +
+            "s.id, s.code, s.title" +
+            ") " +
+            "from Department as d " +
+            "inner join Subject as s on d.id = s.departmentId where d.id = :id "
+    )
+    List<SubjectViewModel> getSubjectInformationByDepartmentId(@Param("id") Long departmentId);
 }

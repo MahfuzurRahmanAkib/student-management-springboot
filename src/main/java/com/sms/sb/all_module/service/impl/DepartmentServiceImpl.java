@@ -6,6 +6,7 @@ import com.sms.sb.all_module.payload.response.DepartmentViewModel;
 import com.sms.sb.all_module.payload.search.DepartmentSearchDto;
 import com.sms.sb.all_module.repository.DepartmentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
+import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -13,6 +14,7 @@ import com.sms.sb.common.util.CaseConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +25,14 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
+    private SubjectService subjectService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository,
+                                 @Lazy SubjectService subjectService) {
         super();
         this.departmentRepository = departmentRepository;
+        this.subjectService = subjectService;
     }
 
     @Override
@@ -99,22 +104,23 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
-    @Override
-    public List<DepartmentViewModel> searchDepartment(DepartmentSearchDto searchDto) {
-        return departmentRepository.searchWithName(searchDto.getName());
-    }
-
     private Department convertToEntity(Department department, DepartmentRequestDto departmentRequestDto) {
         department.setName(CaseConverter.capitalizeFirstCharacter(departmentRequestDto.getName()));
         department.setCode(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getCode()));
         return department;
     }
 
-    public DepartmentViewModel convertToViewModel(Department savedDepartment) {
+    public DepartmentViewModel convertToViewModel(Department department) {
         DepartmentViewModel viewModel = new DepartmentViewModel();
-        viewModel.setId(savedDepartment.getId());
-        viewModel.setCode(savedDepartment.getCode());
-        viewModel.setName(savedDepartment.getName());
+        viewModel.setId(department.getId());
+        viewModel.setCode(department.getCode());
+        viewModel.setName(department.getName());
+        viewModel.setSubjectViewModelList(subjectService.getSubjectInformationByDepartmentId(department.getId()));
         return viewModel;
+    }
+
+    @Override
+    public List<DepartmentViewModel> searchDepartment(DepartmentSearchDto searchDto) {
+        return departmentRepository.searchWithName(searchDto.getName());
     }
 }

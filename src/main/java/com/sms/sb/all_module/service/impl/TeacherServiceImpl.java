@@ -29,7 +29,9 @@ public class TeacherServiceImpl implements TeacherService {
     private SubjectService subjectService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, DepartmentService departmentService, SubjectService subjectService) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository,
+                              DepartmentService departmentService,
+                              SubjectService subjectService) {
         super();
         this.teacherRepository = teacherRepository;
         this.departmentService = departmentService;
@@ -104,11 +106,6 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherList.stream().map(this::convertToViewModel).collect(Collectors.toList());
     }
 
-    @Override
-    public List<TeacherViewModel> searchTeacher(TeacherSearchDto teacherSearchDto) {
-        return teacherRepository.searchWithName(teacherSearchDto.getFirstName());
-    }
-
     public TeacherViewModel convertToViewModel(Teacher teacher) {
         TeacherViewModel viewModel = new TeacherViewModel();
         viewModel.setId(teacher.getId());
@@ -116,7 +113,7 @@ public class TeacherServiceImpl implements TeacherService {
         viewModel.setLastName(teacher.getLastName());
         viewModel.setEmail(teacher.getEmail());
         viewModel.setPhone(teacher.getPhone());
-        viewModel.setSubjectViewModelList(subjectService.getTeachersInformation(teacher.getId()));
+        viewModel.setSubjectViewModelList(subjectService.getSubjectInformationByTeacherId(teacher.getId()));
         return viewModel;
     }
 
@@ -129,5 +126,10 @@ public class TeacherServiceImpl implements TeacherService {
             teacher.setDepartment(departmentService.findById(teacherRequestDto.getDepartmentId()));
         }
         return teacher;
+    }
+
+    @Override
+    public List<TeacherViewModel> searchTeacher(TeacherSearchDto teacherSearchDto) {
+        return teacherRepository.searchWithName(teacherSearchDto.getFirstName());
     }
 }

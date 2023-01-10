@@ -20,5 +20,7 @@ public interface SubjectService {
 
     List<SubjectViewModel> searchSubject(SubjectSearchDto searchDto);
 
-    List<SubjectViewModel> getTeachersInformation(Long id);
+    List<SubjectViewModel> getSubjectInformationByTeacherId(Long id);
+    List<SubjectViewModel> getSubjectInformationByStudentId(Long id);
+    List<SubjectViewModel> getSubjectInformationByDepartmentId(Long id);
 }

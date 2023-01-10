@@ -22,10 +22,10 @@ public class CaseConverter {
         return uncapitalizedString.toLowerCase();
     }
 
-    public static String capitalizeAllCharacter(String capitalizedstring) {
-        if (Objects.isNull(capitalizedstring)) return null;
-        capitalizedstring = StringUtils.normalizeSpace(capitalizedstring);
-        return capitalizedstring.toUpperCase(Locale.ROOT);
+    public static String capitalizeAllCharacter(String capitalizedString) {
+        if (Objects.isNull(capitalizedString)) return null;
+        capitalizedString = StringUtils.normalizeSpace(capitalizedString);
+        return capitalizedString.toUpperCase(Locale.ROOT);
     }
 }
 

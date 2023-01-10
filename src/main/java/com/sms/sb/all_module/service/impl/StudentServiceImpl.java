@@ -7,6 +7,7 @@ import com.sms.sb.all_module.payload.search.StudentSearchDto;
 import com.sms.sb.all_module.repository.StudentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.StudentService;
+import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -25,12 +26,16 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     private DepartmentService departmentService;
+    private SubjectService subjectService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    public StudentServiceImpl(StudentRepository studentRepository, DepartmentService departmentService) {
+    public StudentServiceImpl(StudentRepository studentRepository,
+                              DepartmentService departmentService,
+                              SubjectService subjectService) {
         super();
         this.studentRepository = studentRepository;
         this.departmentService = departmentService;
+        this.subjectService = subjectService;
     }
 
     @Override
@@ -100,19 +105,14 @@ public class StudentServiceImpl implements StudentService {
         return studentList.stream().map(this::convertToViewModel).collect(Collectors.toList());
     }
 
-    public List<StudentViewModel> searchStudent(StudentSearchDto studentSearchDto) {
-        return studentRepository.searchWithName(studentSearchDto.getFirstName());
-    }
-
-    public StudentViewModel convertToViewModel(Student savedStudent) {
+    public StudentViewModel convertToViewModel(Student student) {
         StudentViewModel viewModel = new StudentViewModel();
-        viewModel.setId(savedStudent.getId());
-        viewModel.setFirstName(savedStudent.getFirstName());
-        viewModel.setLastName(savedStudent.getLastName());
-        viewModel.setEmail(savedStudent.getEmail());
-        viewModel.setPhone(savedStudent.getPhone());
-        viewModel.setDepartmentId(savedStudent.getDepartmentId());
-        viewModel.setDepartmentCode(savedStudent.getDepartment().getCode());
+        viewModel.setId(student.getId());
+        viewModel.setFirstName(student.getFirstName());
+        viewModel.setLastName(student.getLastName());
+        viewModel.setEmail(student.getEmail());
+        viewModel.setPhone(student.getPhone());
+        viewModel.setSubjectViewModelList(subjectService.getSubjectInformationByStudentId(student.getId()));
         return viewModel;
     }
 
@@ -121,9 +121,13 @@ public class StudentServiceImpl implements StudentService {
         student.setLastName(CaseConverter.capitalizeFirstCharacter(studentRequestDto.getLastName()));
         student.setEmail(CaseConverter.uncapitalizeAllCharacter(studentRequestDto.getEmail()));
         student.setPhone(studentRequestDto.getPhone());
-        if (Objects.nonNull(studentRequestDto.getDepartmentId())){
+        if (Objects.nonNull(studentRequestDto.getDepartmentId())) {
             student.setDepartment(departmentService.findById(studentRequestDto.getDepartmentId()));
         }
         return student;
+    }
+
+    public List<StudentViewModel> searchStudent(StudentSearchDto studentSearchDto) {
+        return studentRepository.searchWithName(studentSearchDto.getFirstName());
     }
 }

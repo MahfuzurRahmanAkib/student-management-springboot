@@ -17,7 +17,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     List<Department> findAllByDeletedFalse();
 
     @Query("SELECT new com.sms.sb.all_module.payload.response.DepartmentViewModel(" +
-            "d.id,d.code,d.name ) " +
+            "d.id,d.code,d.name) " +
             "FROM Department d WHERE d.name LIKE %:name% AND d.deleted = false"
     )
     List<DepartmentViewModel> searchWithName(@Param("name") String name);
