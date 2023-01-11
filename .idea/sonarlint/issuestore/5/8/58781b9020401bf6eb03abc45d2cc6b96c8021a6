@@ -1,0 +1,7 @@
+
+T
+java:S2589}"7Remove this expression which always evaluates to "true"(¯ôì¢8Æ×ÇÕÙ0
+P
+java:S3416"5Update this logger to use "TeacherServiceImpl.class".(Şº¢øÿÿÿÿ
+m
+java:S6204j"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ÑÙÃÙùÿÿÿÿ

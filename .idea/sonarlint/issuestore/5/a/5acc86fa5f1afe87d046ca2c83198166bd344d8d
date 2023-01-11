@@ -1,0 +1,5 @@
+
+R
+java:S2589|"7Remove this expression which always evaluates to "true"(œ”ÁÅúÿÿÿÿ
+t
+java:S6204i"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ÒƒÁşÿÿÿÿ8ãğøøÙ0

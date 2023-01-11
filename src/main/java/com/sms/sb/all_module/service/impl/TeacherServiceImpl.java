@@ -3,7 +3,7 @@ package com.sms.sb.all_module.service.impl;
 import com.sms.sb.all_module.entity.Teacher;
 import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
-import com.sms.sb.all_module.payload.search.TeacherSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.TeacherRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.SubjectService;
@@ -129,7 +129,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<TeacherViewModel> searchTeacher(TeacherSearchDto teacherSearchDto) {
-        return teacherRepository.searchWithName(teacherSearchDto.getFirstName());
+    public List<TeacherViewModel> searchTeacher(CommonSearchDto searchDto) {
+        return teacherRepository.searchWithName(searchDto.getFirstName());
     }
 }

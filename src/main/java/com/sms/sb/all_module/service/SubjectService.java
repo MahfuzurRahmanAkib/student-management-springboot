@@ -3,7 +3,7 @@ package com.sms.sb.all_module.service;
 import com.sms.sb.all_module.entity.Subject;
 import com.sms.sb.all_module.payload.request.SubjectRequestDto;
 import com.sms.sb.all_module.payload.response.SubjectViewModel;
-import com.sms.sb.all_module.payload.search.SubjectSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface SubjectService {
 
     List<SubjectViewModel> findAll();
 
-    List<SubjectViewModel> searchSubject(SubjectSearchDto searchDto);
+    List<SubjectViewModel> searchSubject(CommonSearchDto searchDto);
 
     List<SubjectViewModel> getSubjectInformationByTeacherId(Long id);
     List<SubjectViewModel> getSubjectInformationByStudentId(Long id);

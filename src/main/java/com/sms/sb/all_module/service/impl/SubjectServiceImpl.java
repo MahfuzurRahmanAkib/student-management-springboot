@@ -3,10 +3,12 @@ package com.sms.sb.all_module.service.impl;
 import com.sms.sb.all_module.entity.Subject;
 import com.sms.sb.all_module.payload.request.SubjectRequestDto;
 import com.sms.sb.all_module.payload.response.SubjectViewModel;
-import com.sms.sb.all_module.payload.search.SubjectSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.SubjectRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.SubjectService;
+import com.sms.sb.common.code_tracker.CodeTrackingService;
+import com.sms.sb.common.code_tracker.CodeType;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -25,18 +27,22 @@ import java.util.stream.Collectors;
 public class SubjectServiceImpl implements SubjectService {
     private SubjectRepository subjectRepository;
     private DepartmentService departmentService;
+    private CodeTrackingService codeTrackingService;
     private static final Logger LOGGER = LoggerFactory.getLogger(SubjectServiceImpl.class);
 
-    public SubjectServiceImpl(SubjectRepository subjectRepository, DepartmentService departmentService) {
+    public SubjectServiceImpl(SubjectRepository subjectRepository,
+                              DepartmentService departmentService,
+                              CodeTrackingService codeTrackingService) {
         super();
         this.subjectRepository = subjectRepository;
         this.departmentService = departmentService;
+        this.codeTrackingService = codeTrackingService;
     }
 
     @Override
     public SubjectViewModel save(SubjectRequestDto subjectRequestDto) {
         Subject subject = new Subject();
-        convertToEntity(subject, subjectRequestDto);
+        convertToSaveEntity(subject, subjectRequestDto);
         Subject savedSubject;
         try {
             savedSubject = subjectRepository.save(subject);
@@ -51,13 +57,13 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject update(SubjectRequestDto subjectRequestDto) {
         if (Objects.isNull(subjectRequestDto.getId())) {
-            LOGGER.error("ID is null: {}", subjectRequestDto);
+            LOGGER.error("Id is null: {}", subjectRequestDto);
             throw new StudentManagementException(
                     ErrorId.INFORMATION_NOT_FOUND, HttpStatus.BAD_REQUEST, MDC.get(ApplicationConstant.TRACE_ID));
         }
         Subject savedSubject = findById(subjectRequestDto.getId());
         try {
-            return subjectRepository.save(convertToEntity(savedSubject, subjectRequestDto));
+            return subjectRepository.save(convertToUpdateEntity(savedSubject, subjectRequestDto));
         } catch (Exception e) {
             LOGGER.error("Information not updated : {}", subjectRequestDto);
             if (e instanceof StudentManagementException) {
@@ -102,7 +108,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<SubjectViewModel> searchSubject(SubjectSearchDto searchDto) {
+    public List<SubjectViewModel> searchSubject(CommonSearchDto searchDto) {
         return subjectRepository.searchWithTitle(searchDto.getTitle());
     }
 
@@ -117,9 +123,17 @@ public class SubjectServiceImpl implements SubjectService {
         return viewModel;
     }
 
-    private Subject convertToEntity(Subject subject, SubjectRequestDto subjectRequestDto) {
+    private Subject convertToSaveEntity(Subject subject, SubjectRequestDto subjectRequestDto) {
         subject.setTitle(CaseConverter.capitalizeFirstCharacter(subjectRequestDto.getTitle()));
-        subject.setCode(CaseConverter.capitalizeAllCharacter(subjectRequestDto.getCode()));
+        subject.setCode(codeTrackingService.generateUniqueCodeNo(CodeType.SUBJECT));
+        if (Objects.nonNull(subjectRequestDto.getDepartmentId())){
+            subject.setDepartment(departmentService.findById(subjectRequestDto.getDepartmentId()));
+        }
+        return subject;
+    }
+
+    private Subject convertToUpdateEntity(Subject subject, SubjectRequestDto subjectRequestDto) {
+        subject.setTitle(CaseConverter.capitalizeFirstCharacter(subjectRequestDto.getTitle()));
         if (Objects.nonNull(subjectRequestDto.getDepartmentId())){
             subject.setDepartment(departmentService.findById(subjectRequestDto.getDepartmentId()));
         }
