@@ -3,7 +3,7 @@ package com.sms.sb.all_module.service.impl;
 import com.sms.sb.all_module.entity.Student;
 import com.sms.sb.all_module.payload.request.StudentRequestDto;
 import com.sms.sb.all_module.payload.response.StudentViewModel;
-import com.sms.sb.all_module.payload.search.StudentSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.StudentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.StudentService;
@@ -127,7 +127,7 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public List<StudentViewModel> searchStudent(StudentSearchDto studentSearchDto) {
-        return studentRepository.searchWithName(studentSearchDto.getFirstName());
+    public List<StudentViewModel> searchStudent(CommonSearchDto searchDto) {
+        return studentRepository.searchWithName(searchDto.getFirstName());
     }
 }

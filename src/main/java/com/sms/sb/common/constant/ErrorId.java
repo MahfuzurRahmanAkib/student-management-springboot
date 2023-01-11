@@ -9,4 +9,6 @@ public class ErrorId {
     public static final String FAIL_TO_DELETE = "e5";
     public static final String INVALID_EMAIL_PATTERN = "e6";
     public static final String SYSTEM_ERROR = "e7";
+    public static final String VOUCHER_ERROR = "e8";
+    public static final String VOUCHER_NO_ERROR = "e9";
 }

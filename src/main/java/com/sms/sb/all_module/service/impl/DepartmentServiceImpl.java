@@ -3,10 +3,12 @@ package com.sms.sb.all_module.service.impl;
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
-import com.sms.sb.all_module.payload.search.DepartmentSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.DepartmentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.SubjectService;
+import com.sms.sb.common.code_tracker.CodeTrackingService;
+import com.sms.sb.common.code_tracker.CodeType;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -26,19 +28,22 @@ import java.util.stream.Collectors;
 public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
     private SubjectService subjectService;
+    private CodeTrackingService codeTrackingService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
     public DepartmentServiceImpl(DepartmentRepository departmentRepository,
-                                 @Lazy SubjectService subjectService) {
+                                 @Lazy SubjectService subjectService,
+                                 CodeTrackingService codeTrackingService) {
         super();
         this.departmentRepository = departmentRepository;
         this.subjectService = subjectService;
+        this.codeTrackingService = codeTrackingService;
     }
 
     @Override
     public DepartmentViewModel save(DepartmentRequestDto departmentRequestDto) {
         Department department = new Department();
-        convertToEntity(department, departmentRequestDto);
+        convertToSaveEntity(department, departmentRequestDto);
         Department savedDepartment;
         try {
             savedDepartment = departmentRepository.save(department);
@@ -59,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         Department savedDepartment = findById(departmentRequestDto.getId());
         try {
-            return departmentRepository.save(convertToEntity(savedDepartment, departmentRequestDto));
+            return departmentRepository.save(convertToUpdateEntity(savedDepartment, departmentRequestDto));
         } catch (Exception e) {
             LOGGER.error("Information not updated : {}", departmentRequestDto);
             if (e instanceof StudentManagementException) {
@@ -104,9 +109,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
-    private Department convertToEntity(Department department, DepartmentRequestDto departmentRequestDto) {
-        department.setName(CaseConverter.capitalizeFirstCharacter(departmentRequestDto.getName()));
-        department.setCode(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getCode()));
+    private Department convertToSaveEntity(Department department, DepartmentRequestDto departmentRequestDto) {
+        department.setName(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getName()));
+        department.setCode(codeTrackingService.generateUniqueCodeNo(CodeType.DEPARTMENT));
+        return department;
+    }
+
+    private Department convertToUpdateEntity(Department department, DepartmentRequestDto departmentRequestDto) {
+        department.setName(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getName()));
         return department;
     }
 
@@ -120,7 +130,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<DepartmentViewModel> searchDepartment(DepartmentSearchDto searchDto) {
+    public List<DepartmentViewModel> searchDepartment(CommonSearchDto searchDto) {
         return departmentRepository.searchWithName(searchDto.getName());
     }
 }

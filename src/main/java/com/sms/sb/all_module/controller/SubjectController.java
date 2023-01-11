@@ -3,7 +3,7 @@ package com.sms.sb.all_module.controller;
 import com.sms.sb.all_module.entity.Subject;
 import com.sms.sb.all_module.payload.request.SubjectRequestDto;
 import com.sms.sb.all_module.payload.response.SubjectViewModel;
-import com.sms.sb.all_module.payload.search.SubjectSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.all_module.service.impl.SubjectServiceImpl;
 import com.sms.sb.common.constant.ApplicationConstant;
@@ -58,7 +58,7 @@ public class SubjectController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<SubjectViewModel>> search(@Valid @RequestBody SubjectSearchDto searchDto) {
+    public ResponseEntity<List<SubjectViewModel>> search(@Valid @RequestBody CommonSearchDto searchDto) {
         List<SubjectViewModel> subjectViewModels = subjectService.searchSubject(searchDto);
         return new ResponseEntity<>(subjectViewModels, HttpStatus.OK);
     }

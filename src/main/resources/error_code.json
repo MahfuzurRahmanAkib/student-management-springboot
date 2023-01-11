@@ -1,6 +1,14 @@
 {
   "apiErrors": [
     {
+      "code": "e8",
+      "message": "Code Tracking Prefix %s not found"
+    },
+    {
+      "code": "e9",
+      "message": "Code last sequence is not incremented!"
+    },
+    {
       "code": "id",
       "message": "Id is required !!"
     },

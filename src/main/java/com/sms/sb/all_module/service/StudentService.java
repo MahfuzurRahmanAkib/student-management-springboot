@@ -3,7 +3,7 @@ package com.sms.sb.all_module.service;
 import com.sms.sb.all_module.entity.Student;
 import com.sms.sb.all_module.payload.request.StudentRequestDto;
 import com.sms.sb.all_module.payload.response.StudentViewModel;
-import com.sms.sb.all_module.payload.search.StudentSearchDto;
+import com.sms.sb.all_module.payload.search.CommonSearchDto;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface StudentService {
 
     List<StudentViewModel> findAll();
 
-    List<StudentViewModel> searchStudent(StudentSearchDto studentSearchDto);
+    List<StudentViewModel> searchStudent(CommonSearchDto studentSearchDto);
 }

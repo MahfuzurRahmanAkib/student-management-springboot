@@ -1,0 +1,6 @@
+##### CODE TRACKING #####
+INSERT INTO [dbo].[code_tracking]
+           ([code_type])
+     VALUES
+           ('SUBJECT'),
+           ('DEPARTMENT');

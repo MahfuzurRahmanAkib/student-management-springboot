@@ -1,6 +1,8 @@
 package com.sms.sb.common.exception;
 
+import com.sms.sb.common.constant.ApplicationConstant;
 import lombok.Data;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
 @Data
@@ -14,5 +16,14 @@ public class StudentManagementException extends RuntimeException {
         this.errorId = errorId;
         this.traceId = traceId;
         this.status = status;
+    }
+    public static StudentManagementException internalServerException(String errorId) {
+        return new StudentManagementException(errorId, HttpStatus.INTERNAL_SERVER_ERROR,
+                MDC.get(ApplicationConstant.TRACE_ID));
+    }
+
+    public static StudentManagementException dataSaveException(String errorId) {
+        return new StudentManagementException(errorId, HttpStatus.INTERNAL_SERVER_ERROR,
+                MDC.get(ApplicationConstant.TRACE_ID));
     }
 }
