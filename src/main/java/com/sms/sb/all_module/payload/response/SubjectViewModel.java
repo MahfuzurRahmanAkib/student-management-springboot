@@ -13,13 +13,4 @@ public class SubjectViewModel {
     private Long id;
     private String subjectTitle;
     private String subjectCode;
-    private Long departmentId;
-    private String departmentCode;
-    private String departmentName;
-
-    public SubjectViewModel(Long id, String subjectTitle, String subjectCode) {
-        this.id = id;
-        this.subjectTitle = subjectTitle;
-        this.subjectCode = subjectCode;
-    }
 }

@@ -2,6 +2,7 @@ package com.sms.sb.all_module.repository;
 
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
+import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,20 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
             "FROM Department d WHERE d.name LIKE %:name% AND d.deleted = false"
     )
     List<DepartmentViewModel> searchWithName(@Param("name") String name);
+
+    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel(" +
+            "sub.id,sub.title,sub.code,d.id,d.code,d.name ) " +
+            "from Student as s " +
+            "inner join Department as d on s.departmentId = d.id " +
+            "inner join Subject as sub on d.id = sub.id where s.id = :id "
+    )
+    List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id);
+
+    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel(" +
+            "sub.id,sub.title,sub.code,d.id,d.code,d.name ) " +
+            "from Teacher as t " +
+            "inner join Department as d on t.departmentId = d.id " +
+            "inner join Subject as sub on d.id = sub.id where t.id = :id "
+    )
+    List<SubjectDepartmentCombinedViewModel> findByTeacherId(Long id);
 }

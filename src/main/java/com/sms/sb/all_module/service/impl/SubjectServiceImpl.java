@@ -2,6 +2,7 @@ package com.sms.sb.all_module.service.impl;
 
 import com.sms.sb.all_module.entity.Subject;
 import com.sms.sb.all_module.payload.request.SubjectRequestDto;
+import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import com.sms.sb.all_module.payload.response.SubjectViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.SubjectRepository;
@@ -40,7 +41,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public SubjectViewModel save(SubjectRequestDto subjectRequestDto) {
+    public SubjectDepartmentCombinedViewModel save(SubjectRequestDto subjectRequestDto) {
         Subject subject = new Subject();
         convertToSaveEntity(subject, subjectRequestDto);
         Subject savedSubject;
@@ -102,18 +103,18 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<SubjectViewModel> findAll() {
+    public List<SubjectDepartmentCombinedViewModel> findAll() {
         List<Subject> subjectList = subjectRepository.findAllByDeletedFalse();
         return subjectList.stream().map(this::convertToViewModel).collect(Collectors.toList());
     }
 
     @Override
-    public List<SubjectViewModel> searchSubject(CommonSearchDto searchDto) {
+    public List<SubjectDepartmentCombinedViewModel> searchSubject(CommonSearchDto searchDto) {
         return subjectRepository.searchWithTitle(searchDto.getTitle());
     }
 
-    public SubjectViewModel convertToViewModel(Subject savedSubject) {
-        SubjectViewModel viewModel = new SubjectViewModel();
+    public SubjectDepartmentCombinedViewModel convertToViewModel(Subject savedSubject) {
+        SubjectDepartmentCombinedViewModel viewModel = new SubjectDepartmentCombinedViewModel();
         viewModel.setId(savedSubject.getId());
         viewModel.setSubjectTitle(savedSubject.getTitle());
         viewModel.setSubjectCode(savedSubject.getCode());
@@ -140,15 +141,7 @@ public class SubjectServiceImpl implements SubjectService {
         return subject;
     }
 
-    public List<SubjectViewModel> getSubjectInformationByTeacherId(Long id) {
-        return subjectRepository.getSubjectInformationByTeacherId(id);
-    }
-
-    public List<SubjectViewModel> getSubjectInformationByStudentId(Long id) {
-        return subjectRepository.getSubjectInformationByStudentId(id);
-    }
-
-    public List<SubjectViewModel> getSubjectInformationByDepartmentId(Long id) {
-        return subjectRepository.getSubjectInformationByDepartmentId(id);
+    public List<SubjectViewModel> getSubjectByDepartmentId(Long id) {
+        return subjectRepository.getSubjectByDepartmentId(id);
     }
 }

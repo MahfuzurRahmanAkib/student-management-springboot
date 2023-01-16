@@ -3,6 +3,7 @@ package com.sms.sb.all_module.service.impl;
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
+import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.DepartmentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
@@ -125,12 +126,20 @@ public class DepartmentServiceImpl implements DepartmentService {
         viewModel.setId(department.getId());
         viewModel.setCode(department.getCode());
         viewModel.setName(department.getName());
-        viewModel.setSubjectViewModelList(subjectService.getSubjectInformationByDepartmentId(department.getId()));
+        viewModel.setSubjectViewModels(subjectService.getSubjectByDepartmentId(department.getId()));
         return viewModel;
     }
 
     @Override
     public List<DepartmentViewModel> searchDepartment(CommonSearchDto searchDto) {
         return departmentRepository.searchWithName(searchDto.getName());
+    }
+
+    public List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id){
+        return departmentRepository.findByStudentId(id);
+    }
+
+    public List<SubjectDepartmentCombinedViewModel> findByTeacherId(Long id){
+        return departmentRepository.findByTeacherId(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.sms.sb.all_module.payload.request;
 
+import com.sms.sb.all_module.payload.constant.Gender;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class StudentRequestDto {
     @NotBlank
     @Size(min = 5, max = 20)
     private String phone;
+    private Gender gender;
     @NotNull
     private Long departmentId;
 }

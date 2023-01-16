@@ -2,7 +2,7 @@ package com.sms.sb.all_module.controller;
 
 import com.sms.sb.all_module.entity.Subject;
 import com.sms.sb.all_module.payload.request.SubjectRequestDto;
-import com.sms.sb.all_module.payload.response.SubjectViewModel;
+import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.all_module.service.impl.SubjectServiceImpl;
@@ -45,21 +45,21 @@ public class SubjectController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<SubjectViewModel>> getAll() {
-        List<SubjectViewModel> allSubjects = subjectService.findAll();
+    public ResponseEntity<List<SubjectDepartmentCombinedViewModel>> getAll() {
+        List<SubjectDepartmentCombinedViewModel> allSubjects = subjectService.findAll();
         return new ResponseEntity<>(allSubjects, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubjectViewModel> getById(@PathVariable Long id) {
+    public ResponseEntity<SubjectDepartmentCombinedViewModel> getById(@PathVariable Long id) {
         Subject subject = subjectService.findById(id);
-        SubjectViewModel subjectViewModel = subjectServiceImpl.convertToViewModel(subject);
-        return new ResponseEntity<>(subjectViewModel, HttpStatus.OK);
+        SubjectDepartmentCombinedViewModel subjectDepartmentCombinedViewModel = subjectServiceImpl.convertToViewModel(subject);
+        return new ResponseEntity<>(subjectDepartmentCombinedViewModel, HttpStatus.OK);
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<SubjectViewModel>> search(@Valid @RequestBody CommonSearchDto searchDto) {
-        List<SubjectViewModel> subjectViewModels = subjectService.searchSubject(searchDto);
-        return new ResponseEntity<>(subjectViewModels, HttpStatus.OK);
+    public ResponseEntity<List<SubjectDepartmentCombinedViewModel>> search(@Valid @RequestBody CommonSearchDto searchDto) {
+        List<SubjectDepartmentCombinedViewModel> subjectDepartmentCombinedViewModels = subjectService.searchSubject(searchDto);
+        return new ResponseEntity<>(subjectDepartmentCombinedViewModels, HttpStatus.OK);
     }
 }

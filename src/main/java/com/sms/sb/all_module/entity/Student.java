@@ -1,5 +1,6 @@
 package com.sms.sb.all_module.entity;
 
+import com.sms.sb.all_module.payload.constant.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,10 @@ public class Student extends BaseEntity{
 
     @Column(name = "last_name", length = 100)
     private String lastName;
+
+    @Column(name = "gender")
+    @Enumerated
+    private Gender gender;
 
     @Column(name = "email", length = 250)
     private String email;

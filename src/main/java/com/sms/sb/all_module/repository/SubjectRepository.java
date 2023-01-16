@@ -1,6 +1,7 @@
 package com.sms.sb.all_module.repository;
 
 import com.sms.sb.all_module.entity.Subject;
+import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import com.sms.sb.all_module.payload.response.SubjectViewModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,29 +17,11 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
     List<Subject> findAllByDeletedFalse();
 
-    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel(" +
+    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel(" +
             "s.id,s.title,s.code,s.departmentId,s.department.code,s.department.name ) " +
             "FROM Subject s WHERE s.title LIKE %:title% AND s.deleted = false"
     )
-    List<SubjectViewModel> searchWithTitle(@Param("title") String title);
-
-    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel( " +
-            "s.id, s.code, s.title, s.departmentId ,s.department.code,s.department.name" +
-            ") " +
-            "from Teacher as t " +
-            "inner join Department as d on d.id = t.departmentId " +
-            "inner join Subject as s on d.id = s.departmentId where t.id = :id "
-    )
-    List<SubjectViewModel> getSubjectInformationByTeacherId(@Param("id") Long teachersId);
-
-    @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel( " +
-            "s.id, s.code, s.title, s.departmentId ,s.department.code,s.department.name" +
-            ") " +
-            "from Student as st " +
-            "inner join Department as d on d.id = st.departmentId " +
-            "inner join Subject as s on d.id = s.departmentId where st.id = :id "
-    )
-    List<SubjectViewModel> getSubjectInformationByStudentId(@Param("id") Long studentId);
+    List<SubjectDepartmentCombinedViewModel> searchWithTitle(@Param("title") String title);
 
     @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectViewModel( " +
             "s.id, s.code, s.title" +
@@ -46,5 +29,5 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
             "from Department as d " +
             "inner join Subject as s on d.id = s.departmentId where d.id = :id "
     )
-    List<SubjectViewModel> getSubjectInformationByDepartmentId(@Param("id") Long departmentId);
+    List<SubjectViewModel> getSubjectByDepartmentId(@Param("id") Long departmentId);
 }

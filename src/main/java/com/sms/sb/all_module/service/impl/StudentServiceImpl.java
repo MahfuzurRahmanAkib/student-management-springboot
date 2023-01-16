@@ -110,9 +110,10 @@ public class StudentServiceImpl implements StudentService {
         viewModel.setId(student.getId());
         viewModel.setFirstName(student.getFirstName());
         viewModel.setLastName(student.getLastName());
+        viewModel.setGender(student.getGender());
         viewModel.setEmail(student.getEmail());
         viewModel.setPhone(student.getPhone());
-        viewModel.setSubjectViewModelList(subjectService.getSubjectInformationByStudentId(student.getId()));
+        viewModel.setSubjectDepartmentCombinedViewModelList(departmentService.findByStudentId(student.getId()));
         return viewModel;
     }
 
@@ -121,6 +122,7 @@ public class StudentServiceImpl implements StudentService {
         student.setLastName(CaseConverter.capitalizeFirstCharacter(studentRequestDto.getLastName()));
         student.setEmail(CaseConverter.uncapitalizeAllCharacter(studentRequestDto.getEmail()));
         student.setPhone(studentRequestDto.getPhone());
+        student.setGender(studentRequestDto.getGender());
         if (Objects.nonNull(studentRequestDto.getDepartmentId())) {
             student.setDepartment(departmentService.findById(studentRequestDto.getDepartmentId()));
         }
