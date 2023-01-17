@@ -20,12 +20,13 @@ public class StudentViewModel {
     private Gender gender;
     private String email;
     private String phone;
-    private List<SubjectDepartmentCombinedViewModel> subjectDepartmentCombinedViewModelList = new ArrayList<>();
+    private List<SubjectDepartmentCombinedViewModel> combinedViewModels = new ArrayList<>();
 
-    public StudentViewModel(Long id, String firstName, String lastName, String email, String phone) {
+    public StudentViewModel(Long id, String firstName, String lastName, Gender gender, String email, String phone) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.gender = gender;
         this.email = email;
         this.phone = phone;
     }

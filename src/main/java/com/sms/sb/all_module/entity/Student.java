@@ -21,7 +21,7 @@ public class Student extends BaseEntity{
     @Column(name = "last_name", length = 100)
     private String lastName;
 
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = false)
     @Enumerated
     private Gender gender;
 

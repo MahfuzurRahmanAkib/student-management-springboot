@@ -16,10 +16,4 @@ public class SubjectDepartmentCombinedViewModel {
     private Long departmentId;
     private String departmentCode;
     private String departmentName;
-
-    public SubjectDepartmentCombinedViewModel(Long id, String subjectTitle, String subjectCode) {
-        this.id = id;
-        this.subjectTitle = subjectTitle;
-        this.subjectCode = subjectCode;
-    }
 }

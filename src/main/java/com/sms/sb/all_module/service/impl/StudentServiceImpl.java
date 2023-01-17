@@ -113,7 +113,7 @@ public class StudentServiceImpl implements StudentService {
         viewModel.setGender(student.getGender());
         viewModel.setEmail(student.getEmail());
         viewModel.setPhone(student.getPhone());
-        viewModel.setSubjectDepartmentCombinedViewModelList(departmentService.findByStudentId(student.getId()));
+        viewModel.setCombinedViewModels(departmentService.findByStudentId(student.getId()));
         return viewModel;
     }
 

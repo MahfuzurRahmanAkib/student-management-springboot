@@ -17,8 +17,8 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Optional<Teacher> findByIdAndDeletedFalse(Long id);
 
     @Query("SELECT new com.sms.sb.all_module.payload.response.TeacherViewModel(" +
-            "p.id, p.firstName, p.lastName, p.email, p.phone)" +
-            "FROM Teacher p WHERE p.firstName LIKE %:firstName% AND p.deleted = false"
+            "t.id, t.firstName, t.lastName, t.email, t.phone)" +
+            "FROM Teacher t WHERE t.firstName LIKE %:firstName% AND t.deleted = false"
     )
     List<TeacherViewModel> searchWithName(@Param("firstName") String firstName);
 }

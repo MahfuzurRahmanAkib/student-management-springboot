@@ -113,7 +113,7 @@ public class TeacherServiceImpl implements TeacherService {
         viewModel.setLastName(teacher.getLastName());
         viewModel.setEmail(teacher.getEmail());
         viewModel.setPhone(teacher.getPhone());
-        viewModel.setSubjectDepartmentCombinedViewModelList(departmentService.findByTeacherId(teacher.getId()));
+        viewModel.setCombinedViewModels(departmentService.findByTeacherId(teacher.getId()));
         return viewModel;
     }
 

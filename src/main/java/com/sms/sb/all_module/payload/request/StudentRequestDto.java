@@ -30,6 +30,7 @@ public class StudentRequestDto {
     @NotBlank
     @Size(min = 5, max = 20)
     private String phone;
+    @NotNull
     private Gender gender;
     @NotNull
     private Long departmentId;

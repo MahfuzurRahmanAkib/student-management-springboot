@@ -17,8 +17,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByIdAndDeletedFalse(Long id);
 
     @Query("SELECT new com.sms.sb.all_module.payload.response.StudentViewModel(" +
-            "p.id,p.firstName, p.lastName, p.email, p.phone) " +
-            "FROM Student p WHERE p.firstName LIKE %:firstName% AND p.deleted = false"
+            "s.id,s.firstName, s.lastName,s.gender, s.email, s.phone) " +
+            "FROM Student s WHERE s.firstName LIKE %:firstName% AND s.deleted = false"
     )
     List<StudentViewModel> searchWithName(@Param("firstName") String firstName);
 }
