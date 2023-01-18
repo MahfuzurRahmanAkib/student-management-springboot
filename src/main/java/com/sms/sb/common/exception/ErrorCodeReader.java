@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class ErrorCodeReader {
 
     public static Map<String, StudentManagementError> errorMap = new HashMap<>();
+
     public ErrorCodeReader() {
         readErrorCode();
     }

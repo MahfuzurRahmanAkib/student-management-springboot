@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -25,4 +26,19 @@ public class Subject extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Subject)) return false;
+        return Objects.nonNull(this.getId()) && Objects.equals(this.getId(), (((Subject) object).getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        if (Objects.isNull(this.getId())) {
+            return this.getClass().hashCode();
+        }
+        return this.getId().hashCode();
+    }
 }

@@ -17,6 +17,7 @@ public class StudentManagementException extends RuntimeException {
         this.traceId = traceId;
         this.status = status;
     }
+
     public static StudentManagementException internalServerException(String errorId) {
         return new StudentManagementException(errorId, HttpStatus.INTERNAL_SERVER_ERROR,
                 MDC.get(ApplicationConstant.TRACE_ID));

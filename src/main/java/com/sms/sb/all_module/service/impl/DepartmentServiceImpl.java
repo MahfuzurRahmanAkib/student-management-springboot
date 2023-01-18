@@ -27,11 +27,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+
     private DepartmentRepository departmentRepository;
     private SubjectService subjectService;
     private CodeTrackingService codeTrackingService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
+    /**
+     * Constructor
+     *
+     * @param departmentRepository {@link DepartmentRepository}
+     * @param subjectService       {@link SubjectService}
+     * @param codeTrackingService  {@link CodeTrackingService}
+     */
     public DepartmentServiceImpl(DepartmentRepository departmentRepository,
                                  @Lazy SubjectService subjectService,
                                  CodeTrackingService codeTrackingService) {
@@ -41,6 +49,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         this.codeTrackingService = codeTrackingService;
     }
 
+    /**
+     * Save department
+     *
+     * @param departmentRequestDto {@link DepartmentViewModel}
+     * @return message
+     */
     @Override
     public DepartmentViewModel save(DepartmentRequestDto departmentRequestDto) {
         Department department = new Department();
@@ -56,6 +70,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         return convertToViewModel(savedDepartment);
     }
 
+    /**
+     * Update method
+     *
+     * @param departmentRequestDto {@link DepartmentRequestDto}
+     * @return message
+     */
     @Override
     public Department update(DepartmentRequestDto departmentRequestDto) {
         if (Objects.isNull(departmentRequestDto.getId())) {
@@ -76,6 +96,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
+    /**
+     * Delete method
+     *
+     * @param id required id
+     */
     @Override
     public void deleteById(Long id) {
         Department department = findById(id);
@@ -89,6 +114,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
+    /**
+     * Single get method
+     *
+     * @param id required id
+     * @return response
+     */
     @Override
     public Department findById(Long id) {
         if (Objects.isNull(id)) {
@@ -103,6 +134,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         });
     }
 
+    /**
+     * find all method
+     *
+     * @return response
+     */
     @Override
     public List<DepartmentViewModel> findAll() {
         List<Department> departmentList = departmentRepository.findAllByDeletedFalse();
@@ -110,15 +146,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
-    private Department convertToSaveEntity(Department department, DepartmentRequestDto departmentRequestDto) {
-        department.setName(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getName()));
-        department.setCode(codeTrackingService.generateUniqueCodeNo(CodeType.DEPARTMENT));
-        return department;
-    }
-
-    private Department convertToUpdateEntity(Department department, DepartmentRequestDto departmentRequestDto) {
-        department.setName(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getName()));
-        return department;
+    /**
+     * search method
+     *
+     * @param searchDto {@link CommonSearchDto}
+     * @return response
+     */
+    @Override
+    public List<DepartmentViewModel> searchDepartment(CommonSearchDto searchDto) {
+        return departmentRepository.searchWithName(searchDto.getName());
     }
 
     public DepartmentViewModel convertToViewModel(Department department) {
@@ -130,16 +166,22 @@ public class DepartmentServiceImpl implements DepartmentService {
         return viewModel;
     }
 
-    @Override
-    public List<DepartmentViewModel> searchDepartment(CommonSearchDto searchDto) {
-        return departmentRepository.searchWithName(searchDto.getName());
-    }
-
-    public List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id){
+    public List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id) {
         return departmentRepository.findByStudentId(id);
     }
 
-    public List<SubjectDepartmentCombinedViewModel> findByTeacherId(Long id){
+    public List<SubjectDepartmentCombinedViewModel> findByTeacherId(Long id) {
         return departmentRepository.findByTeacherId(id);
+    }
+
+    private Department convertToSaveEntity(Department department, DepartmentRequestDto departmentRequestDto) {
+        department.setName(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getName()));
+        department.setCode(codeTrackingService.generateUniqueCodeNo(CodeType.DEPARTMENT));
+        return department;
+    }
+
+    private Department convertToUpdateEntity(Department department, DepartmentRequestDto departmentRequestDto) {
+        department.setName(CaseConverter.capitalizeAllCharacter(departmentRequestDto.getName()));
+        return department;
     }
 }

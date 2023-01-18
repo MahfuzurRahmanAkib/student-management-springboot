@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -29,4 +30,19 @@ public class Department extends BaseEntity {
 
     @OneToMany(mappedBy = "department", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Subject> subjectList = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Department)) return false;
+        return Objects.nonNull(this.getId()) && Objects.equals(this.getId(), (((Department) object).getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        if (Objects.isNull(this.getId())) {
+            return this.getClass().hashCode();
+        }
+        return this.getId().hashCode();
+    }
 }

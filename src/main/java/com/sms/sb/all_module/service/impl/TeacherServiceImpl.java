@@ -6,7 +6,6 @@ import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.TeacherRepository;
 import com.sms.sb.all_module.service.DepartmentService;
-import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.all_module.service.TeacherService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
@@ -26,18 +25,27 @@ import java.util.stream.Collectors;
 public class TeacherServiceImpl implements TeacherService {
     private TeacherRepository teacherRepository;
     private DepartmentService departmentService;
-    private SubjectService subjectService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
+    /**
+     * constructor
+     *
+     * @param teacherRepository {@link TeacherRepository}
+     * @param departmentService {@link DepartmentService}
+     */
     public TeacherServiceImpl(TeacherRepository teacherRepository,
-                              DepartmentService departmentService,
-                              SubjectService subjectService) {
+                              DepartmentService departmentService) {
         super();
         this.teacherRepository = teacherRepository;
         this.departmentService = departmentService;
-        this.subjectService = subjectService;
     }
 
+    /**
+     * save method
+     *
+     * @param teacherRequestDto {@link TeacherRequestDto}
+     * @return message
+     */
     @Override
     public TeacherViewModel save(TeacherRequestDto teacherRequestDto) {
         Teacher teacher = new Teacher();
@@ -53,6 +61,12 @@ public class TeacherServiceImpl implements TeacherService {
         return convertToViewModel(savedTeacher);
     }
 
+    /**
+     * update method
+     *
+     * @param teacherRequestDto {@link TeacherRequestDto}
+     * @return message
+     */
     @Override
     public Teacher update(TeacherRequestDto teacherRequestDto) {
         if (Objects.isNull(teacherRequestDto.getId())) {
@@ -73,6 +87,12 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
+    /**
+     * Single get method
+     *
+     * @param id required id
+     * @return response
+     */
     @Override
     public Teacher findById(Long id) {
         if (Objects.isNull(id)) {
@@ -87,6 +107,11 @@ public class TeacherServiceImpl implements TeacherService {
         });
     }
 
+    /**
+     * Delete method
+     *
+     * @param id required id
+     */
     @Override
     public void deleteById(Long id) {
         Teacher teacher = findById(id);
@@ -100,10 +125,26 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
+    /**
+     * find all method
+     *
+     * @return response
+     */
     @Override
     public List<TeacherViewModel> findAll() {
         List<Teacher> teacherList = teacherRepository.findAllByDeletedFalse();
         return teacherList.stream().map(this::convertToViewModel).collect(Collectors.toList());
+    }
+
+    /**
+     * search method
+     *
+     * @param searchDto {@link CommonSearchDto}
+     * @return response
+     */
+    @Override
+    public List<TeacherViewModel> searchTeacher(CommonSearchDto searchDto) {
+        return teacherRepository.searchWithName(searchDto.getFirstName());
     }
 
     public TeacherViewModel convertToViewModel(Teacher teacher) {
@@ -122,14 +163,9 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setLastName(CaseConverter.capitalizeFirstCharacter(teacherRequestDto.getLastName()));
         teacher.setEmail(CaseConverter.uncapitalizeAllCharacter(teacherRequestDto.getEmail()));
         teacher.setPhone(teacherRequestDto.getPhone());
-        if (Objects.nonNull(teacherRequestDto.getDepartmentId())){
+        if (Objects.nonNull(teacherRequestDto.getDepartmentId())) {
             teacher.setDepartment(departmentService.findById(teacherRequestDto.getDepartmentId()));
         }
         return teacher;
-    }
-
-    @Override
-    public List<TeacherViewModel> searchTeacher(CommonSearchDto searchDto) {
-        return teacherRepository.searchWithName(searchDto.getFirstName());
     }
 }

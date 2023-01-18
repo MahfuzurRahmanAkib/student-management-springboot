@@ -7,7 +7,6 @@ import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.StudentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.StudentService;
-import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -26,18 +25,27 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     private DepartmentService departmentService;
-    private SubjectService subjectService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
+    /**
+     * Constructor
+     *
+     * @param studentRepository {@link StudentRepository}
+     * @param departmentService {@link DepartmentService}
+     */
     public StudentServiceImpl(StudentRepository studentRepository,
-                              DepartmentService departmentService,
-                              SubjectService subjectService) {
+                              DepartmentService departmentService) {
         super();
         this.studentRepository = studentRepository;
         this.departmentService = departmentService;
-        this.subjectService = subjectService;
     }
 
+    /**
+     * save method
+     *
+     * @param studentRequestDto {@link DepartmentService}
+     * @return message
+     */
     @Override
     public StudentViewModel save(StudentRequestDto studentRequestDto) {
         Student student = new Student();
@@ -53,6 +61,12 @@ public class StudentServiceImpl implements StudentService {
         return convertToViewModel(savedStudent);
     }
 
+    /**
+     * update method
+     *
+     * @param studentRequestDto {@link StudentRequestDto}
+     * @return message
+     */
     public Student update(StudentRequestDto studentRequestDto) {
         if (Objects.isNull(studentRequestDto.getId())) {
             LOGGER.error("ID is null: {}", studentRequestDto);
@@ -72,6 +86,11 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    /**
+     * Delete method
+     *
+     * @param id required id
+     */
     @Override
     public void deleteById(Long id) {
         Student student = findById(id);
@@ -85,6 +104,12 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    /**
+     * Single get method
+     *
+     * @param id required id
+     * @return response
+     */
     @Override
     public Student findById(Long id) {
         if (Objects.isNull(id)) {
@@ -99,10 +124,25 @@ public class StudentServiceImpl implements StudentService {
         });
     }
 
+    /**
+     * find all method
+     *
+     * @return response
+     */
     @Override
     public List<StudentViewModel> findAll() {
         List<Student> studentList = studentRepository.findAllByDeletedFalse();
         return studentList.stream().map(this::convertToViewModel).collect(Collectors.toList());
+    }
+
+    /**
+     * search method
+     *
+     * @param searchDto {@link CommonSearchDto}
+     * @return response
+     */
+    public List<StudentViewModel> searchStudent(CommonSearchDto searchDto) {
+        return studentRepository.searchWithName(searchDto.getFirstName());
     }
 
     public StudentViewModel convertToViewModel(Student student) {
@@ -127,9 +167,5 @@ public class StudentServiceImpl implements StudentService {
             student.setDepartment(departmentService.findById(studentRequestDto.getDepartmentId()));
         }
         return student;
-    }
-
-    public List<StudentViewModel> searchStudent(CommonSearchDto searchDto) {
-        return studentRepository.searchWithName(searchDto.getFirstName());
     }
 }

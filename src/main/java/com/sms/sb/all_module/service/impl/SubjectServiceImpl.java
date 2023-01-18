@@ -31,6 +31,13 @@ public class SubjectServiceImpl implements SubjectService {
     private CodeTrackingService codeTrackingService;
     private static final Logger LOGGER = LoggerFactory.getLogger(SubjectServiceImpl.class);
 
+    /**
+     * constructor
+     *
+     * @param subjectRepository   {@link SubjectRepository}
+     * @param departmentService   {@link DepartmentService}
+     * @param codeTrackingService {@link CodeTrackingService}
+     */
     public SubjectServiceImpl(SubjectRepository subjectRepository,
                               DepartmentService departmentService,
                               CodeTrackingService codeTrackingService) {
@@ -40,6 +47,11 @@ public class SubjectServiceImpl implements SubjectService {
         this.codeTrackingService = codeTrackingService;
     }
 
+    /**
+     *save method
+     * @param subjectRequestDto {@link SubjectRequestDto}
+     * @return message
+     */
     @Override
     public SubjectDepartmentCombinedViewModel save(SubjectRequestDto subjectRequestDto) {
         Subject subject = new Subject();
@@ -55,6 +67,11 @@ public class SubjectServiceImpl implements SubjectService {
         return convertToViewModel(savedSubject);
     }
 
+    /**
+     * update method
+     * @param subjectRequestDto {@link SubjectRequestDto}
+     * @return message
+     */
     @Override
     public Subject update(SubjectRequestDto subjectRequestDto) {
         if (Objects.isNull(subjectRequestDto.getId())) {
@@ -75,6 +92,11 @@ public class SubjectServiceImpl implements SubjectService {
         }
     }
 
+    /**
+     * Delete method
+     *
+     * @param id required id
+     */
     @Override
     public void deleteById(Long id) {
         Subject subject = findById(id);
@@ -88,6 +110,12 @@ public class SubjectServiceImpl implements SubjectService {
         }
     }
 
+    /**
+     * Single get method
+     *
+     * @param id required id
+     * @return response
+     */
     @Override
     public Subject findById(Long id) {
         if (Objects.isNull(id)) {
@@ -102,15 +130,30 @@ public class SubjectServiceImpl implements SubjectService {
         });
     }
 
+    /**
+     * find all method
+     *
+     * @return response
+     */
     @Override
     public List<SubjectDepartmentCombinedViewModel> findAll() {
         List<Subject> subjectList = subjectRepository.findAllByDeletedFalse();
         return subjectList.stream().map(this::convertToViewModel).collect(Collectors.toList());
     }
 
+    /**
+     * search method
+     *
+     * @param searchDto {@link CommonSearchDto}
+     * @return response
+     */
     @Override
     public List<SubjectDepartmentCombinedViewModel> searchSubject(CommonSearchDto searchDto) {
         return subjectRepository.searchWithTitle(searchDto.getTitle());
+    }
+
+    public List<SubjectViewModel> getSubjectByDepartmentId(Long id) {
+        return subjectRepository.getSubjectByDepartmentId(id);
     }
 
     public SubjectDepartmentCombinedViewModel convertToViewModel(Subject savedSubject) {
@@ -127,7 +170,7 @@ public class SubjectServiceImpl implements SubjectService {
     private Subject convertToSaveEntity(Subject subject, SubjectRequestDto subjectRequestDto) {
         subject.setTitle(CaseConverter.capitalizeFirstCharacter(subjectRequestDto.getTitle()));
         subject.setCode(codeTrackingService.generateUniqueCodeNo(CodeType.SUBJECT));
-        if (Objects.nonNull(subjectRequestDto.getDepartmentId())){
+        if (Objects.nonNull(subjectRequestDto.getDepartmentId())) {
             subject.setDepartment(departmentService.findById(subjectRequestDto.getDepartmentId()));
         }
         return subject;
@@ -135,13 +178,9 @@ public class SubjectServiceImpl implements SubjectService {
 
     private Subject convertToUpdateEntity(Subject subject, SubjectRequestDto subjectRequestDto) {
         subject.setTitle(CaseConverter.capitalizeFirstCharacter(subjectRequestDto.getTitle()));
-        if (Objects.nonNull(subjectRequestDto.getDepartmentId())){
+        if (Objects.nonNull(subjectRequestDto.getDepartmentId())) {
             subject.setDepartment(departmentService.findById(subjectRequestDto.getDepartmentId()));
         }
         return subject;
-    }
-
-    public List<SubjectViewModel> getSubjectByDepartmentId(Long id) {
-        return subjectRepository.getSubjectByDepartmentId(id);
     }
 }
