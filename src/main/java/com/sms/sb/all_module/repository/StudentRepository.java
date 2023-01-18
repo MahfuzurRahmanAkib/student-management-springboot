@@ -1,7 +1,7 @@
 package com.sms.sb.all_module.repository;
 
 import com.sms.sb.all_module.entity.Student;
-import com.sms.sb.all_module.payload.response.StudentViewModel;
+import com.sms.sb.all_module.payload.search.StudentSearchResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,9 +16,22 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Optional<Student> findByIdAndDeletedFalse(Long id);
 
-    @Query("SELECT new com.sms.sb.all_module.payload.response.StudentViewModel(" +
-            "s.id,s.firstName, s.lastName,s.gender, s.email, s.phone) " +
-            "FROM Student s WHERE s.firstName LIKE %:firstName% AND s.deleted = false"
+    @Query(value = "SELECT new com.sms.sb.all_module.payload.search.StudentSearchResponse ( " +
+            "st.id, " +
+            "st.firstName, " +
+            "st.lastName, " +
+            "st.gender, " +
+            "st.email, " +
+            "st.phone, " +
+            "s.title, " +
+            "s.code, " +
+            "d.code, " +
+            "d.name" +
+            ") " +
+            "from Student as st " +
+            "inner join Department as d on d.id = st.departmentId " +
+            "inner join Subject as s on s.departmentId = d.id " +
+            "where st.firstName like %:firstName% and st.deleted = false"
     )
-    List<StudentViewModel> searchWithName(@Param("firstName") String firstName);
+    List<StudentSearchResponse> searchWithName(@Param("firstName") String firstName);
 }

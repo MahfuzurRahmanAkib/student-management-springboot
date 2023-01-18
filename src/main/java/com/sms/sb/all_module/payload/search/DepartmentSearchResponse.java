@@ -9,9 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommonSearchDto {
-    private String firstName;
-    private String title;
-    private String name;
-    private String code;
+public class DepartmentSearchResponse {
+    private Long id;
+    private String subjectTitle;
+    private String subjectCode;
+    private String departmentCode;
+    private String departmentName;
 }

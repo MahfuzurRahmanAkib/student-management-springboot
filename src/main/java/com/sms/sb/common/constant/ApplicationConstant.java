@@ -10,9 +10,7 @@ public class ApplicationConstant {
     public static final String SYSTEM_ERROR_MSG = "system exception has been thrown";
     public static final Integer VALUE_ZERO = 0;
     public static final Integer VALUE_ONE = 1;
-    public static final String WORK_ORDER_NO_INITIAL = "USBA/STR";
     public static final String DASH = "-";
-    public static final String SLASH = "/";
     public static final String FOUR_DIGIT_FORMAT = "%04d";
     public static final String MESSAGE_SEPARATOR = "###";
 }

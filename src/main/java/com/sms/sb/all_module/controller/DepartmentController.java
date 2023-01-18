@@ -4,6 +4,7 @@ import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
+import com.sms.sb.all_module.payload.search.DepartmentSearchResponse;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.impl.DepartmentServiceImpl;
 import com.sms.sb.common.constant.ApplicationConstant;
@@ -58,8 +59,8 @@ public class DepartmentController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<DepartmentViewModel>> search(@Valid @RequestBody CommonSearchDto searchDto) {
-        List<DepartmentViewModel> departmentViewModels = departmentService.searchDepartment(searchDto);
+    public ResponseEntity<List<DepartmentSearchResponse>> search(@Valid @RequestBody CommonSearchDto searchDto) {
+        List<DepartmentSearchResponse> departmentViewModels = departmentService.searchDepartment(searchDto);
         return new ResponseEntity<>(departmentViewModels, HttpStatus.OK);
     }
 }

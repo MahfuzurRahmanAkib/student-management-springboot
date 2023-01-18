@@ -3,6 +3,7 @@ package com.sms.sb.all_module.repository;
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
 import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
+import com.sms.sb.all_module.payload.search.DepartmentSearchResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,11 +18,18 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     List<Department> findAllByDeletedFalse();
 
-    @Query("SELECT new com.sms.sb.all_module.payload.response.DepartmentViewModel(" +
-            "d.id,d.code,d.name) " +
-            "FROM Department d WHERE d.name LIKE %:name% AND d.deleted = false"
+    @Query(value = "SELECT new com.sms.sb.all_module.payload.search.DepartmentSearchResponse ( " +
+            "d.id, " +
+            "s.title, " +
+            "s.code, " +
+            "d.code, " +
+            "d.name" +
+            ") " +
+            "from Department as d " +
+            "inner join Subject as s on s.departmentId = d.id " +
+            "where d.code like %:code% and d.deleted = false"
     )
-    List<DepartmentViewModel> searchWithName(@Param("name") String name);
+    List<DepartmentSearchResponse> searchWithName(@Param("code") String code);
 
     @Query("SELECT new com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel(" +
             "sub.id,sub.title,sub.code,d.id,d.code,d.name ) " +

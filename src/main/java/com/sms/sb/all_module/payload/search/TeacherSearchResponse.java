@@ -1,4 +1,4 @@
-package com.sms.sb.all_module.payload.response;
+package com.sms.sb.all_module.payload.search;
 
 import com.sms.sb.all_module.payload.constant.Gender;
 import lombok.AllArgsConstructor;
@@ -6,19 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentViewModel {
+public class TeacherSearchResponse {
     private Long id;
     private String firstName;
     private String lastName;
-    private Gender gender;
     private String email;
     private String phone;
-    private List<SubjectDepartmentCombinedViewModel> combinedViewModels = new ArrayList<>();
+    private String subjectTitle;
+    private String subjectCode;
+    private String departmentCode;
+    private String departmentName;
 }

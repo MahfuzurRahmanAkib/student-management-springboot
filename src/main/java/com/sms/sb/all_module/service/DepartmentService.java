@@ -5,6 +5,7 @@ import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
 import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
+import com.sms.sb.all_module.payload.search.DepartmentSearchResponse;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface DepartmentService {
 
     List<DepartmentViewModel> findAll();
 
-    List<DepartmentViewModel> searchDepartment(CommonSearchDto searchDto);
+    List<DepartmentSearchResponse> searchDepartment(CommonSearchDto searchDto);
 
     List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id);
 

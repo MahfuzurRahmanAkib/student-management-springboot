@@ -1,6 +1,7 @@
 package com.sms.sb.all_module.controller;
 
 import com.sms.sb.all_module.entity.Teacher;
+import com.sms.sb.all_module.payload.search.TeacherSearchResponse;
 import com.sms.sb.all_module.payload.request.TeacherRequestDto;
 import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
@@ -58,8 +59,8 @@ public class TeacherController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<TeacherViewModel>> search(@Valid @RequestBody CommonSearchDto searchDto) {
-        List<TeacherViewModel> teacherViewModelList = teacherService.searchTeacher(searchDto);
+    public ResponseEntity<List<TeacherSearchResponse>> search(@Valid @RequestBody CommonSearchDto searchDto) {
+        List<TeacherSearchResponse> teacherViewModelList = teacherService.searchTeacher(searchDto);
         return new ResponseEntity<>(teacherViewModelList, HttpStatus.OK);
     }
 }
