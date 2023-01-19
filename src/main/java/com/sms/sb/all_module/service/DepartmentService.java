@@ -22,7 +22,7 @@ public interface DepartmentService {
 
     List<DepartmentSearchResponse> searchDepartment(CommonSearchDto searchDto);
 
-    List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id);
+    List<DepartmentViewModel> findByStudentId(Long id);
 
-    List<SubjectDepartmentCombinedViewModel> findByTeacherId(Long id);
+    List<DepartmentViewModel> findByTeacherId(Long id);
 }

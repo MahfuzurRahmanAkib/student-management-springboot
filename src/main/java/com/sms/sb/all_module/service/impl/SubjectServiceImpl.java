@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
-    private SubjectRepository subjectRepository;
-    private DepartmentService departmentService;
-    private CodeTrackingService codeTrackingService;
+    private final SubjectRepository subjectRepository;
+    private final DepartmentService departmentService;
+    private final CodeTrackingService codeTrackingService;
     private static final Logger LOGGER = LoggerFactory.getLogger(SubjectServiceImpl.class);
 
     /**

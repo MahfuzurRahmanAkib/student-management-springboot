@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private DepartmentRepository departmentRepository;
-    private SubjectService subjectService;
-    private CodeTrackingService codeTrackingService;
+    private final DepartmentRepository departmentRepository;
+    private final SubjectService subjectService;
+    private final CodeTrackingService codeTrackingService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
     /**
@@ -167,11 +167,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         return viewModel;
     }
 
-    public List<SubjectDepartmentCombinedViewModel> findByStudentId(Long id) {
+    public List<DepartmentViewModel> findByStudentId(Long id) {
         return departmentRepository.findByStudentId(id);
     }
 
-    public List<SubjectDepartmentCombinedViewModel> findByTeacherId(Long id) {
+    public List<DepartmentViewModel> findByTeacherId(Long id) {
         return departmentRepository.findByTeacherId(id);
     }
 

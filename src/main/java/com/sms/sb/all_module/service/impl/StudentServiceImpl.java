@@ -8,6 +8,7 @@ import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.StudentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.StudentService;
+import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
 import com.sms.sb.common.exception.StudentManagementException;
@@ -24,20 +25,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    private StudentRepository studentRepository;
-    private DepartmentService departmentService;
+    private final StudentRepository studentRepository;
+    private final SubjectService subjectService;
+    private final DepartmentService departmentService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     /**
      * Constructor
      *
-     * @param studentRepository {@link StudentRepository}
-     * @param departmentService {@link DepartmentService}
+     * @param studentRepository    {@link StudentRepository}
+     * @param subjectService{@link SubjectService}
+     * @param departmentService    {@link DepartmentService}
      */
     public StudentServiceImpl(StudentRepository studentRepository,
+                              SubjectService subjectService,
                               DepartmentService departmentService) {
         super();
         this.studentRepository = studentRepository;
+        this.subjectService = subjectService;
         this.departmentService = departmentService;
     }
 
@@ -154,7 +159,8 @@ public class StudentServiceImpl implements StudentService {
         viewModel.setGender(student.getGender());
         viewModel.setEmail(student.getEmail());
         viewModel.setPhone(student.getPhone());
-        viewModel.setCombinedViewModels(departmentService.findByStudentId(student.getId()));
+        viewModel.setDepartmentViewModels(departmentService.findByStudentId(student.getId()));
+        viewModel.setSubjectViewModels(subjectService.getSubjectByDepartmentId(student.getDepartmentId()));
         return viewModel;
     }
 

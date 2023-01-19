@@ -16,5 +16,6 @@ public class TeacherViewModel {
     private String lastName;
     private String email;
     private String phone;
-    private List<SubjectDepartmentCombinedViewModel> combinedViewModels = new ArrayList<>();
+    private List<DepartmentViewModel> departmentViewModels = new ArrayList<>();
+    private List<SubjectViewModel> subjectViewModels = new ArrayList<>();
 }

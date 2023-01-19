@@ -20,5 +20,6 @@ public class StudentViewModel {
     private Gender gender;
     private String email;
     private String phone;
-    private List<SubjectDepartmentCombinedViewModel> combinedViewModels = new ArrayList<>();
+    private List<DepartmentViewModel> departmentViewModels = new ArrayList<>();
+    private List<SubjectViewModel> subjectViewModels = new ArrayList<>();
 }

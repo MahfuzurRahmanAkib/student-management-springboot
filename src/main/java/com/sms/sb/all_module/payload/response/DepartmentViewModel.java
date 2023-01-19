@@ -17,4 +17,9 @@ public class DepartmentViewModel {
     private String code;
     private String name;
     private List<SubjectViewModel> subjectViewModels = new ArrayList<>();
+    public DepartmentViewModel(Long id, String code, String name) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+    }
 }

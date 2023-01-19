@@ -7,6 +7,7 @@ import com.sms.sb.all_module.payload.response.TeacherViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.repository.TeacherRepository;
 import com.sms.sb.all_module.service.DepartmentService;
+import com.sms.sb.all_module.service.SubjectService;
 import com.sms.sb.all_module.service.TeacherService;
 import com.sms.sb.common.constant.ApplicationConstant;
 import com.sms.sb.common.constant.ErrorId;
@@ -24,20 +25,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
-    private TeacherRepository teacherRepository;
-    private DepartmentService departmentService;
+    private final TeacherRepository teacherRepository;
+    private final SubjectService subjectService;
+    private final DepartmentService departmentService;
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     /**
      * constructor
      *
      * @param teacherRepository {@link TeacherRepository}
+     * @param subjectService    {@link SubjectService}
      * @param departmentService {@link DepartmentService}
      */
     public TeacherServiceImpl(TeacherRepository teacherRepository,
+                              SubjectService subjectService,
                               DepartmentService departmentService) {
         super();
         this.teacherRepository = teacherRepository;
+        this.subjectService = subjectService;
         this.departmentService = departmentService;
     }
 
@@ -155,7 +160,8 @@ public class TeacherServiceImpl implements TeacherService {
         viewModel.setLastName(teacher.getLastName());
         viewModel.setEmail(teacher.getEmail());
         viewModel.setPhone(teacher.getPhone());
-        viewModel.setCombinedViewModels(departmentService.findByTeacherId(teacher.getId()));
+        viewModel.setDepartmentViewModels(departmentService.findByStudentId(teacher.getId()));
+        viewModel.setSubjectViewModels(subjectService.getSubjectByDepartmentId(teacher.getDepartmentId()));
         return viewModel;
     }
 
