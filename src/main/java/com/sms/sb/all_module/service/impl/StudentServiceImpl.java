@@ -1,10 +1,10 @@
 package com.sms.sb.all_module.service.impl;
 
 import com.sms.sb.all_module.entity.Student;
-import com.sms.sb.all_module.payload.search.StudentSearchResponse;
 import com.sms.sb.all_module.payload.request.StudentRequestDto;
 import com.sms.sb.all_module.payload.response.StudentViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
+import com.sms.sb.all_module.payload.search.StudentSearchResponse;
 import com.sms.sb.all_module.repository.StudentRepository;
 import com.sms.sb.all_module.service.DepartmentService;
 import com.sms.sb.all_module.service.StudentService;
@@ -159,7 +159,7 @@ public class StudentServiceImpl implements StudentService {
         viewModel.setGender(student.getGender());
         viewModel.setEmail(student.getEmail());
         viewModel.setPhone(student.getPhone());
-        viewModel.setDepartmentViewModels(departmentService.findByStudentId(student.getId()));
+        viewModel.setDepartmentViewModel(departmentService.findByStudentId(student.getId()));
         viewModel.setSubjectViewModels(subjectService.getSubjectByDepartmentId(student.getDepartmentId()));
         return viewModel;
     }

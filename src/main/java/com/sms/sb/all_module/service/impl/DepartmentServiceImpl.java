@@ -3,7 +3,6 @@ package com.sms.sb.all_module.service.impl;
 import com.sms.sb.all_module.entity.Department;
 import com.sms.sb.all_module.payload.request.DepartmentRequestDto;
 import com.sms.sb.all_module.payload.response.DepartmentViewModel;
-import com.sms.sb.all_module.payload.response.SubjectDepartmentCombinedViewModel;
 import com.sms.sb.all_module.payload.search.CommonSearchDto;
 import com.sms.sb.all_module.payload.search.DepartmentSearchResponse;
 import com.sms.sb.all_module.repository.DepartmentRepository;
@@ -167,11 +166,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         return viewModel;
     }
 
-    public List<DepartmentViewModel> findByStudentId(Long id) {
+    public DepartmentViewModel findByStudentId(Long id) {
         return departmentRepository.findByStudentId(id);
     }
 
-    public List<DepartmentViewModel> findByTeacherId(Long id) {
+    public DepartmentViewModel findByTeacherId(Long id) {
         return departmentRepository.findByTeacherId(id);
     }
 

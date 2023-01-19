@@ -1,6 +1,5 @@
 package com.sms.sb.all_module.payload.search;
 
-import com.sms.sb.all_module.payload.constant.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
